@@ -86,32 +86,69 @@ namespace HelloWorld
             return (b * b) - (4 * a * c);
         }
 
+        static (int Type, double? x0, double? x1) GetResultsTuple(string sA, string sB, string sC)
+        {
+            double a, b, c;
+            a = StringToDoubleCaster.ToDouble(sA);
+            b = StringToDoubleCaster.ToDouble(sB);
+            c = StringToDoubleCaster.ToDouble(sC);
+
+            (int Type, double? x0, double? x1) resultTuple;
+
+            if (CheckForInfinity(a, b, c))
+            {
+                resultTuple = (-1, null, null);
+                return resultTuple;
+            }
+
+            double[] resultValues = getXs(a, b, c);
+            resultTuple = (0, null, null);
+            if (resultValues.Length == 1)
+            {
+                resultTuple = (1, resultValues[0], null);
+            }
+
+            else if(resultValues.Length == 2)
+            {   
+                resultTuple = (2, resultValues[0], resultValues[1]);
+            }
+            
+            return resultTuple;
+        }
+
         static void Main(string[] args)
         {
-            int errorCode = CheckIfValid(args);
+            string sA, sB, sC;
+            Console.WriteLine("a = ");
+            sA = Console.ReadLine();
+            Console.WriteLine("b = ");
+            sB = Console.ReadLine();
+            Console.WriteLine("c = ");
+            sC = Console.ReadLine();
+
+            int errorCode = CheckIfValid(new string[]{sA, sB, sC});
             if (errorCode != 0) return;
+            Console.WriteLine($"EQUATION: {sA}x^2 + {sB}x + {sC} = 0\n");
 
-            double a, b, c;
-            a = StringToDoubleCaster.ToDouble(args[0]);
-            b = StringToDoubleCaster.ToDouble(args[1]);
-            c = StringToDoubleCaster.ToDouble(args[2]);
+            (int Type, double? x0, double? x1) resultTuple = GetResultsTuple(sA, sB, sC);
 
-            Console.WriteLine($"EQUATION: {a}x^2 + {b}x + {c} = 0\n");
 
             const string result = "RESULT(s): ";
-            if (CheckForInfinity(a, b, c))
+            if (resultTuple.Type == -1)
             {
                 Console.WriteLine($"{result} infinity");
                 return;
             }
 
-            double[] resultValues = getXs(a, b, c);
-            Console.WriteLine($"{result} {resultValues.Length}");
-            for (int i = 0; i < resultValues.Length; i++)
+            Console.WriteLine($"{result} {resultTuple.Type}");
+            if(resultTuple.Type > 0)
             {
-                Console.WriteLine($"x{i} = {resultValues[i]}");
+                Console.WriteLine($"x0 = {resultTuple.x0}");
             }
-            // test pushing from lower folder
+            if (resultTuple.Type > 1)
+            {
+                Console.WriteLine($"x1 = {resultTuple.x1}");
+            }
         }
     }
 }
