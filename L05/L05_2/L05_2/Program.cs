@@ -5,44 +5,45 @@ namespace L05_2
 
     class Program
     {
-        static int? GetSemiMaxRecurrent(string input, int left_n, int max_val, int semi_max_val)
+        static int? GetSemiMax(int n)
         {
-            if (left_n == 0)
+            (int? max_val, int? semi_max_val) resultTuple = (null, null);
+            int counter = 0;
+            char ch;
+            string previous = "";
+            int nextInt;
+            while (counter < n)
             {
-                if (max_val == semi_max_val) return null;
-                return semi_max_val;
-            }
-            int next_val;
-            if (left_n == 1)
-            {
-                next_val = int.Parse(input);
-                input = "";
-            }
-            else
-            {
-                string valuePart = input.Split(' ', '\t', '\n')[0];
-                //Console.WriteLine(valuePart);
-                next_val = int.Parse(valuePart);
-                input = input.Substring(valuePart.Length + 1);
-                //Console.WriteLine(input);
-            }
+                nextInt = Console.Read();
 
-            if (max_val < next_val)
-            {
-                semi_max_val = max_val;
-                max_val = next_val;
+
+                ch = Convert.ToChar(nextInt);
+                if (Char.IsWhiteSpace(ch))
+                {
+
+                    if (previous.Length > 0)
+                    {
+                        int val_read = int.Parse(previous);
+                        previous = "";
+                        counter++;
+
+                        if (resultTuple.max_val == null || val_read > resultTuple.max_val)
+                        {
+                            resultTuple = (val_read, resultTuple.max_val);
+                        }
+                        else if (resultTuple.semi_max_val != null && val_read > resultTuple.semi_max_val)
+                        {
+                            resultTuple = (resultTuple.max_val, val_read);
+                        }
+                    }
+
+                }
+                else
+                {
+                    previous += ch;
+                }
             }
-            else if (semi_max_val < next_val)
-            {
-                semi_max_val = next_val;
-            }
-            return GetSemiMaxRecurrent(input, left_n - 1, max_val, semi_max_val);
-        }
-        static int? GetSemiMax(string input, int n)
-        {
-            string valuePart = input.Split(' ', '\t', '\n')[0];
-            int next_val = int.Parse(valuePart);
-            return GetSemiMaxRecurrent(input, n, next_val, next_val);
+            return resultTuple.semi_max_val;
         }
         static void Main(string[] args)
         {
@@ -64,7 +65,15 @@ namespace L05_2
             }
 
             Console.WriteLine($"Pass {n} arguments (ints):");
-            string n_arguments = Console.ReadLine();
+            int? semiMax = GetSemiMax(n);
+
+            if (semiMax == null)
+            {
+                Console.WriteLine("Brak rozwiązania.");
+                return;
+            }
+            Console.WriteLine($"{semiMax}");
+
             /*
             int max_val = int.Parse(args[1]);
             int semi_max_val = max_val;
@@ -79,7 +88,6 @@ namespace L05_2
                 }
             }
             */
-            Console.WriteLine(GetSemiMax(n_arguments, n));
         }
     }
 }

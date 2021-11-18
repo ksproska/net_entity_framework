@@ -53,7 +53,7 @@ namespace HelloWorld
             }
 
             double delta = CountDelta(a, b, c);
-            Console.WriteLine(delta);
+            //Console.WriteLine(delta);
             if (delta > 0)
             {
                 double x1 = (-b - Math.Sqrt(delta)) / (2 * a);
@@ -87,13 +87,21 @@ namespace HelloWorld
         }
 
         static (int Type, double? x0, double? x1) GetResultsTuple(string sA, string sB, string sC)
-        {
+        {   
+            (int Type, double? x0, double? x1) resultTuple;
+            int errorCode = CheckIfValid(new string[] { sA, sB, sC });
+            if (errorCode != 0)
+            {
+                resultTuple = (-2, null, null);
+                return resultTuple;
+            }
+
             double a, b, c;
             a = StringToDoubleCaster.ToDouble(sA);
             b = StringToDoubleCaster.ToDouble(sB);
             c = StringToDoubleCaster.ToDouble(sC);
 
-            (int Type, double? x0, double? x1) resultTuple;
+            
 
             if (CheckForInfinity(a, b, c))
             {
@@ -116,6 +124,19 @@ namespace HelloWorld
             return resultTuple;
         }
 
+        static double RoundToSignificantDigits(double? td, int digits)
+        {
+            double d = (double)td;
+            if (d == 0)
+                return 0;
+            int innDigits = digits - (int)Math.Floor(Math.Log10(Math.Abs(d))) - 1;
+            /*if((int)Math.Floor(Math.Abs(d)) == 0)
+            {
+                innDigits += 1;
+            }*/
+            return Math.Round(d, innDigits);
+        }
+
         static void Main(string[] args)
         {
             string sA, sB, sC;
@@ -126,12 +147,17 @@ namespace HelloWorld
             Console.WriteLine("c = ");
             sC = Console.ReadLine();
 
-            int errorCode = CheckIfValid(new string[]{sA, sB, sC});
-            if (errorCode != 0) return;
+            /*int errorCode = CheckIfValid(new string[]{sA, sB, sC});
+            if (errorCode != 0) return;*/
+
             Console.WriteLine($"EQUATION: {sA}x^2 + {sB}x + {sC} = 0\n");
 
             (int Type, double? x0, double? x1) resultTuple = GetResultsTuple(sA, sB, sC);
-
+            if (resultTuple.Type < -1)
+            {
+                Console.WriteLine($"Arguments must be dubble.");
+                return;
+            }
 
             const string result = "RESULT(s): ";
             if (resultTuple.Type == -1)
@@ -143,11 +169,11 @@ namespace HelloWorld
             Console.WriteLine($"{result} {resultTuple.Type}");
             if(resultTuple.Type > 0)
             {
-                Console.WriteLine($"x0 = {resultTuple.x0}");
+                Console.WriteLine("x0 = {0}", RoundToSignificantDigits(resultTuple.x0, 5).ToString());
             }
             if (resultTuple.Type > 1)
             {
-                Console.WriteLine($"x1 = {resultTuple.x1}");
+                Console.WriteLine($"x1 = {RoundToSignificantDigits(resultTuple.x1, 5)}");
             }
         }
     }

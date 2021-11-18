@@ -1,8 +1,7 @@
 {
   "profiles": {
     "L05_2": {
-      "commandName": "Project",
-      "commandLineArgs": "7 3 4 2 6 1 6"
+      "commandName": "Project"
     }
   }
 }
