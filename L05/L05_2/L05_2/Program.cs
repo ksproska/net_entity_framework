@@ -23,7 +23,9 @@ namespace L05_2
 
                     if (previous.Length > 0)
                     {
+                        //Console.WriteLine(previous);
                         int val_read = int.Parse(previous);
+                        //Console.WriteLine(val_read);
                         previous = "";
                         counter++;
 
@@ -31,10 +33,15 @@ namespace L05_2
                         {
                             resultTuple = (val_read, resultTuple.max_val);
                         }
+                        else if (resultTuple.semi_max_val == null)
+                        {
+                            resultTuple = (resultTuple.max_val, val_read);
+                        }
                         else if (resultTuple.semi_max_val != null && val_read > resultTuple.semi_max_val)
                         {
                             resultTuple = (resultTuple.max_val, val_read);
                         }
+                        //Console.WriteLine($"{resultTuple.max_val} {resultTuple.semi_max_val}");
                     }
 
                 }
