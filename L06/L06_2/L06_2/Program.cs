@@ -8,7 +8,7 @@ namespace L06_2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            // int class = 10;
         }
     }
 }
