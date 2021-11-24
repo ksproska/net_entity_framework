@@ -35,7 +35,7 @@ namespace L06_6
         }
         static void Main(string[] args)
         {
-            var namedTuple = CountMyTypes(true, "a", "abcde", 4, 4, 3, 2.3, -1.2, 23.8278479873, new String(""));
+            var namedTuple = CountMyTypes("a", "abcde", 4, 4, 3, 2.3, -1.2, 23.8278479873);
             Console.WriteLine($"(int evenIntegers, int positiveReal, int moreThan5SignStrings, int other): {namedTuple}");
 
         }

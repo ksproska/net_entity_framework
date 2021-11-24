@@ -17,26 +17,20 @@ namespace L06_5
     class Program
     {   static void DrawCard(string name, string surname="Kowalski", char filler='X', int frameWidth=2, int frameMinWidth=20)
         {   
-            // adjusting vals
-            int numberNameLInes = 2;
             if(frameWidth < 0)
             {
                 frameWidth = 2;
             }
             int cardWidth = frameMinWidth;
-            int extraFill = 2;
-            int tempNameLen = name.Length + extraFill + 2 * frameWidth;
-            if (tempNameLen > cardWidth)
+            if(name.Length + 2 + 2*frameWidth > cardWidth)
             {
-                cardWidth = tempNameLen;
+                cardWidth = name.Length + 2 + 2 * frameWidth;
             }
-            int tempSurnameLen = surname.Length + extraFill + 2 * frameWidth;
-            if (tempSurnameLen > cardWidth)
+            if (surname.Length + 2 + 2 * frameWidth > cardWidth)
             {
-                cardWidth = tempSurnameLen;
+                cardWidth = surname.Length + 2 + 2 * frameWidth;
             }
-            // creating lines
-            char[][] allStrings = new char[numberNameLInes + 2 * frameWidth][];
+            char[][] allStrings = new char[frameWidth * 2 + 2][];
 
             char[] frame = new char[cardWidth];
             Array.Fill(frame, filler);
@@ -49,7 +43,7 @@ namespace L06_5
             allStrings[frameWidth] = l1;
             allStrings[frameWidth + 1] = l2;
 
-            // filling with frame
+
             for (int i = 0; i < frameWidth; i++)
             {
                 allStrings[i] = frame;
@@ -61,10 +55,7 @@ namespace L06_5
                 l2[cardWidth - 1 - i] = filler;
             }
 
-            // filling with name
-            (int startImie, int startNazwisko) indexes = (
-                (int)(cardWidth / 2 - name.Length / 2), 
-                (int)(cardWidth / 2 - surname.Length / 2));
+            (int startImie, int startNazwisko) indexes = ((int)(cardWidth/2 - name.Length/2), (int)(cardWidth / 2 - surname.Length / 2));
             
             for(int i=0; i<name.Length; i++)
             {
@@ -75,7 +66,7 @@ namespace L06_5
                 l2[i + indexes.startNazwisko] = surname[i];
             }
 
-            // printing whole thing
+
             foreach (char[] line in allStrings)
             {
                 Console.WriteLine(String.Join("", line));
