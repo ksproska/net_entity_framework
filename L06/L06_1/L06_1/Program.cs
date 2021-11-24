@@ -9,10 +9,24 @@ namespace L06_1
 {
     class Program
     {
-        static (string imie, string nazwisko, int wiek, double placa) printTupleContent((string imie, string nazwisko, int wiek, double placa) namedTuple, string newNazwisko)
+        static (string imie, string nazwisko, int wiek, double placa) changeTupleContent((string imie, string nazwisko, int wiek, double placa) namedTuple, string newNazwisko)
         {
             namedTuple.nazwisko = newNazwisko;
             return namedTuple;
+        }
+
+        static void printTupleContent((string imie, string nazwisko, int wiek, double placa) namedTuple)
+        {
+            Console.WriteLine($"Osoba: {namedTuple.nazwisko} {namedTuple.imie}; Wiek: {namedTuple.wiek}; Pensja: {namedTuple.placa}");
+
+            Console.WriteLine($"Osoba: {namedTuple.Item2} {namedTuple.Item1}; Wiek: {namedTuple.Item3}; Pensja: {namedTuple.Item4}");
+
+            string nazwisko; double placa;
+            (_, nazwisko, _, placa) = namedTuple;
+            Console.WriteLine($"Osoba: {nazwisko}; Pensja: {placa}");
+
+            var (imie, _, wiek, _) = namedTuple;
+            Console.WriteLine($"Osoba: {imie}; Wiek: {wiek}");
         }
 
         static void Main(string[] args)
@@ -20,16 +34,8 @@ namespace L06_1
             (string imie, string nazwisko, int wiek, double placa) namedTuple;
             namedTuple = ("Kamila", "Sproska", 21, 1500.00);
             
-            namedTuple = printTupleContent(namedTuple, "Kowalska");
-            Console.WriteLine($"Osoba: {namedTuple.nazwisko} {namedTuple.imie}; Wiek: {namedTuple.wiek}; Pensja: {namedTuple.placa}");
-
-
-            string nazwisko; double placa;
-            (_, nazwisko, _, placa) = namedTuple;
-            Console.WriteLine($"Osoba: {nazwisko}; Pensja: {placa}");
-
-            (var imie, _, var wiek, _) = namedTuple;
-            Console.WriteLine($"Osoba: {imie}; Wiek: {wiek}");
+            namedTuple = changeTupleContent(namedTuple, "Kowalska");
+            printTupleContent(namedTuple);
         }
     }
 }

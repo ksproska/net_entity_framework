@@ -8,7 +8,8 @@ namespace L06_2
     {
         static void Main(string[] args)
         {
-            // int class = 10;
+            int @class = 10;
+            Console.WriteLine(@class);
         }
     }
 }
