@@ -46,8 +46,8 @@ namespace L07_2
     public class Triangle: IFigure, IHasInterior
     {
         private Point a, b, c;
-        private Color innerColor;
-        Triangle(Point a, Point b, Point c)
+        private Color innerColor = new Color("000000");
+        public Triangle(Point a, Point b, Point c)
         {
             this.a = a;
             this.b = b;
@@ -63,11 +63,11 @@ namespace L07_2
             b.move(x, y);
             c.move(x, y);
         }
-        public Color GetInteriorColor()
+        Color IHasInterior.GetInteriorColor()
         {
             return innerColor;
         }
-        public void SetInteriorColor(Color color)
+        void IHasInterior.SetInteriorColor(Color color)
         {
             innerColor = color;
         }
@@ -95,8 +95,13 @@ namespace L07_2
             Point p1 = new Point(0.2, 4.3);
             Point p2 = new Point(22.2, 3.3);
             Point p3 = new Point(44.2, 4.3);
+            p3.move(1, 1);
+            Triangle t1 = new Triangle(p1, p2, p3, red);
+            Triangle t2 = new Triangle(p1, p2, p3);
+            ((IHasInterior)t2).SetInteriorColor(green);
 
-            object[] allMyObjects = { green, p1, p2, "", new Triangle(p1, p2, p3, red), 14, new Triangle(p1, p2, p3, green) };
+
+            object[] allMyObjects = { green, p1, p2, "", t1, 14, t2 };
 
             PrintAllColors(allMyObjects);
         }
