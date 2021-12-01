@@ -24,7 +24,7 @@ namespace L07_1
             set { if (value <= 0) denominator = 1; else denominator = value; }
         }
 
-        public MixedNumber(bool sign, int natural, int numerator, int denominator)
+        public MixedNumber(int natural, int numerator, int denominator, bool sign = true)
         {
             this.Positive = sign;
             this.Natural = natural;
@@ -37,22 +37,35 @@ namespace L07_1
             }
         }
 
+        public MixedNumber(double doubleValue, bool sign = true, int precision = 5)
+        {
+            this.Positive = sign;
+            this.Natural = 0;
+            this.Numerator = (int)Math.Floor(doubleValue*Math.Pow(10, precision));
+            this.Denominator = (int)Math.Pow(10, precision);
+
+            if (SimplifyMixedNumber())
+            {
+                simplificationCounter += 1;
+            }
+        }
+
         public void PrintAll()
         {
-            Console.WriteLine($"{ToString()} = {ToDouble()}  <=  (sign:{Positive}; natural:{natural}; numerator:{numerator}; denominator:{denominator})");
+            Console.WriteLine($"{ToString().PadRight(15)} = {ToDouble()}".PadRight(45) + $"<=  ({Positive}\t {natural}, {numerator}, {denominator})");
         }
 
-        public MixedNumber(int natural, bool sign = true) : this(sign, natural, 0, 1) { }
-        public MixedNumber(int numerator, int denominator, bool sign = true) : this(sign, 0, numerator, denominator) { }
-
-        private static int gcd(int a, int b)
-        {
-            if (b == 0) return a;
-            return gcd(b, a % b);
-        }
+        public MixedNumber(int natural, bool sign = true) : this(natural, 0, 1, sign) { }
+        public MixedNumber(int numerator, int denominator, bool sign = true) : this(0, numerator, denominator, sign) { }
 
         private bool SimplifyMixedNumber()
         {
+            int gcd(int a, int b)
+            {
+                if (b == 0) return a;
+                return gcd(b, a % b);
+            }
+
             bool operationsFlag = false;
             while(numerator >= denominator)
             {
@@ -70,7 +83,7 @@ namespace L07_1
             }
             else
             {
-                int gcdVal = MixedNumber.gcd(numerator, denominator);
+                int gcdVal = gcd(numerator, denominator);
                 if (gcdVal != 1)
                 {
                     numerator /= gcdVal;
@@ -134,43 +147,53 @@ namespace L07_1
 
             if (n1.Positive == n2.Positive)
             {
-                return new MixedNumber(n1.Positive, 0, n1_numerator + n2_numerator, denominator);
+                return new MixedNumber(0, n1_numerator + n2_numerator, denominator, n1.Positive);
             }
             if (n1_numerator == n2_numerator)
             {
-                return new MixedNumber(true, 0, 0, 1);
+                return new MixedNumber( 0, 0, 1, true);
             }
             
             if (n1_numerator > n2_numerator)
             {
-                return new MixedNumber(n1.Positive, 0, Math.Abs(n1_numerator - n2_numerator), denominator);
+                return new MixedNumber( 0, Math.Abs(n1_numerator - n2_numerator), denominator, n1.Positive);
             }
-            return new MixedNumber(n2.Positive, 0, Math.Abs(n1_numerator - n2_numerator), denominator);
+            return new MixedNumber(0, Math.Abs(n1_numerator - n2_numerator), denominator, n2.Positive);
+        }
+
+        public void Deconstruct(out bool sign, out int natural, out int numerator, out int denominator)
+        {
+            (sign, natural, numerator, denominator) = (this.Positive, this.Natural, this.Numerator, this.Denominator);
         }
     }
     class Program
     {
         static void Main(string[] args)
         {
-            //MixedNumber mx1 = new MixedNumber(3, 3, 35);
-            //mx1.PrintAll();
-            //MixedNumber mx2 = new MixedNumber(3, 4, 512, false);
-            //mx1.PrintAll();
-            //MixedNumber mx3 = new MixedNumber(1, 7);
-            //mx1.PrintAll();
-            //MixedNumber mx4 = new MixedNumber(8, 17, false);
-            //mx1.PrintAll();
-            //MixedNumber mx5 = new MixedNumber(3);
-            //mx1.PrintAll();
-            //MixedNumber mx6 = new MixedNumber(5, false);
+            MixedNumber mx1 = new MixedNumber(4, 3, 35);
+            mx1.PrintAll();
+            MixedNumber mx2 = new MixedNumber(3, 4, 52, false);
+            mx2.PrintAll();
+            MixedNumber mx3 = new MixedNumber(1, 7);
+            mx3.PrintAll();
+            MixedNumber mx4 = new MixedNumber(8, 17, false);
+            mx4.PrintAll();
+            MixedNumber mx5 = new MixedNumber(3);
+            mx5.PrintAll();
+            MixedNumber mx6 = new MixedNumber(5, false);
+            mx6.PrintAll();
+            MixedNumber mx7 = new MixedNumber(3.34);
+            mx7.PrintAll();
+            MixedNumber mx8 = new MixedNumber(5.25304, false);
+            mx8.PrintAll();
 
-            MixedNumber mx = new MixedNumber(true, 1, 35,  3);
-            Console.WriteLine(mx);
-            mx.PrintAll();
-            MixedNumber mx2 = new MixedNumber(36);
-            Console.WriteLine(mx2);
-            Console.WriteLine(mx + mx2);
+            Console.WriteLine(mx1 + mx2);
+            Console.WriteLine(mx3 + mx4 + mx5);
 
+            bool s;
+            int num;
+            mx1.Deconstruct(out s, out num, out _, out int dec);
+            Console.WriteLine($"{s} - {num} - {dec}");
         }
     }
 }
