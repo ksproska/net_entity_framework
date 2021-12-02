@@ -5,56 +5,62 @@ namespace L07_1
     class MixedNumber
     {
         public bool IsPositive { get; set; }  = true;
-        private int natural, numerator, denominator; // get set dla set domyslna, z duzej litery
+        private int natural, numerator, denominator;
+        private const int defNatural = 0, defNumerator = 0, defDenominator = 1;
 
         public static int SimplificationCounter { get; private set; }
 
         public int Natural
         {
             get { return natural; }
-            set { if (value < 0) natural = 0; else natural = value; }
+            set { if (value < 0) natural = defNatural; else natural = value; }
         }
         public int Numerator
         {
             get { return numerator; }
-            set { if (value < 0) numerator = 0; else numerator = value; }
+            set { numeratorSetterWithDefault(value); if (SimplifyMixedNumber()) { SimplificationCounter += 1; } }
         }
         public int Denominator
         {
             get { return denominator; }
-            set { if (value <= 0) denominator = 1; else denominator = value; }
+            set { denominatorSetterWithDefault(value); if (SimplifyMixedNumber()) { SimplificationCounter += 1; } }
+        }
+
+        private void numeratorSetterWithDefault(int value)
+        {
+            if (value < 0) numerator = defNumerator; else numerator = value;
+        }
+
+        private void denominatorSetterWithDefault(int value)
+        {
+            if (value <= 0) denominator = defDenominator; else denominator = value;
         }
 
         public MixedNumber(int natural, int numerator, int denominator, bool sign = true)
         {
             this.IsPositive = sign;
             this.Natural = natural;
+            numeratorSetterWithDefault(numerator);
+            denominatorSetterWithDefault(denominator);
 
-            this.Numerator = numerator;
-            this.Denominator = denominator;
-
-            if(SimplifyMixedNumber())
-            {
-                SimplificationCounter += 1;
-            }
+            if(SimplifyMixedNumber()) { SimplificationCounter += 1; }
         }
 
         public MixedNumber(double doubleValue, bool sign = true, int precision = 5)
         {
             this.IsPositive = sign;
             this.Natural = 0;
-            this.Numerator = (int)Math.Floor(Math.Abs(doubleValue*Math.Pow(10, precision)));
-            this.Denominator = (int)Math.Pow(10, precision);
+            int tempNumerator = (int)Math.Floor(Math.Abs(doubleValue*Math.Pow(10, precision)));
+            int tempDenumerator = (int)Math.Pow(10, precision);
+            numeratorSetterWithDefault(tempNumerator);
+            denominatorSetterWithDefault(tempDenumerator);
 
-            if (SimplifyMixedNumber())
-            {
-                SimplificationCounter += 1;
-            }
+            if (SimplifyMixedNumber()) { SimplificationCounter += 1; }
         }
 
         public void PrintAll()
         {
-            Console.WriteLine($"{ToString().PadRight(15)} = {ToDouble()}".PadRight(45) + $"<=  ({IsPositive}\t {natural}, {numerator}, {denominator})");
+            Console.WriteLine($"{SimplificationCounter}".PadRight(4) + $"{ToString().PadRight(15)} = {ToDouble()}".PadRight(45) + $"<=  ({IsPositive}\t {natural}, {numerator}, {denominator})");
         }
 
         public MixedNumber(int natural, bool sign = true) : this(natural, 0, 1, sign) { }
@@ -145,6 +151,7 @@ namespace L07_1
             int denominator = n1.denominator * n2.denominator;
             n1_numerator += n1.natural * denominator;
             n2_numerator += n2.natural * denominator;
+            // natural is eqal 0 (value is contained in numerator)
 
 
             if (n1.IsPositive == n2.IsPositive)
@@ -173,6 +180,7 @@ namespace L07_1
         static void Main(string[] args)
         {
             MixedNumber mx1 = new MixedNumber(4, 3, 35);
+            mx1.Numerator = 5;
             mx1.PrintAll();
             MixedNumber mx2 = new MixedNumber(3, 4, 52, false);
             mx2.PrintAll();
@@ -188,12 +196,14 @@ namespace L07_1
             mx7.PrintAll();
             MixedNumber mx8 = new MixedNumber(5.25304, false);
             mx8.PrintAll();
-
-            Console.WriteLine(mx1 + mx2);
-            Console.WriteLine(mx3 + mx4 + mx5);
+            
+            Console.WriteLine($"\n{mx1} + {mx2} = {mx1 + mx2}");
+            Console.WriteLine($"\n{mx3} + {mx4} + {mx5} = {mx3 + mx4 + mx5}");
+            Console.WriteLine($"\n{mx1} + {mx3} + {mx6} = {mx1 + mx3 + mx6}");
 
             var (s, num, _, dec) = mx1;
-            Console.WriteLine($"{s} - {num} - {dec}");
+            
+            Console.WriteLine($"\n{s} - {num} - {dec}\n");
 
             Console.WriteLine(MixedNumber.SimplificationCounter);
         }
