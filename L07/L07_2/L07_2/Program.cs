@@ -4,15 +4,15 @@ namespace L07_2
 {
     public class Color
     {
-        private string hexValue { set; get; }
+        private string HexValue { set; get; }
         public Color(string hexValue)
         {
-            this.hexValue = hexValue;
+            this.HexValue = hexValue;
         }
 
         override public string ToString()
         {
-            return $"#{hexValue}";
+            return $"#{HexValue}";
         }
     }
     public interface IFigure

@@ -4,9 +4,10 @@ namespace L07_1
 {
     class MixedNumber
     {
-        private static int simplificationCounter = 0;
-        public bool Positive { get; set; }  = true;
+        public bool IsPositive { get; set; }  = true;
         private int natural, numerator, denominator; // get set dla set domyslna, z duzej litery
+
+        public static int SimplificationCounter { get; private set; }
 
         public int Natural
         {
@@ -26,33 +27,34 @@ namespace L07_1
 
         public MixedNumber(int natural, int numerator, int denominator, bool sign = true)
         {
-            this.Positive = sign;
+            this.IsPositive = sign;
             this.Natural = natural;
+
             this.Numerator = numerator;
             this.Denominator = denominator;
 
             if(SimplifyMixedNumber())
             {
-                simplificationCounter += 1;
+                SimplificationCounter += 1;
             }
         }
 
         public MixedNumber(double doubleValue, bool sign = true, int precision = 5)
         {
-            this.Positive = sign;
+            this.IsPositive = sign;
             this.Natural = 0;
-            this.Numerator = (int)Math.Floor(doubleValue*Math.Pow(10, precision));
+            this.Numerator = (int)Math.Floor(Math.Abs(doubleValue*Math.Pow(10, precision)));
             this.Denominator = (int)Math.Pow(10, precision);
 
             if (SimplifyMixedNumber())
             {
-                simplificationCounter += 1;
+                SimplificationCounter += 1;
             }
         }
 
         public void PrintAll()
         {
-            Console.WriteLine($"{ToString().PadRight(15)} = {ToDouble()}".PadRight(45) + $"<=  ({Positive}\t {natural}, {numerator}, {denominator})");
+            Console.WriteLine($"{ToString().PadRight(15)} = {ToDouble()}".PadRight(45) + $"<=  ({IsPositive}\t {natural}, {numerator}, {denominator})");
         }
 
         public MixedNumber(int natural, bool sign = true) : this(natural, 0, 1, sign) { }
@@ -111,7 +113,7 @@ namespace L07_1
                 sToString = $"{natural}";
             }
 
-            if (!Positive)
+            if (!IsPositive)
             {
                 if(natural != 0 & numerator != 0)
                 {
@@ -130,7 +132,7 @@ namespace L07_1
         {
             double doubleVal = natural;
             doubleVal += (double)numerator / denominator;
-            if(!Positive)
+            if(!IsPositive)
             {
                 doubleVal *= -1;
             }
@@ -145,9 +147,9 @@ namespace L07_1
             n2_numerator += n2.natural * denominator;
 
 
-            if (n1.Positive == n2.Positive)
+            if (n1.IsPositive == n2.IsPositive)
             {
-                return new MixedNumber(0, n1_numerator + n2_numerator, denominator, n1.Positive);
+                return new MixedNumber(0, n1_numerator + n2_numerator, denominator, n1.IsPositive);
             }
             if (n1_numerator == n2_numerator)
             {
@@ -156,14 +158,14 @@ namespace L07_1
             
             if (n1_numerator > n2_numerator)
             {
-                return new MixedNumber( 0, Math.Abs(n1_numerator - n2_numerator), denominator, n1.Positive);
+                return new MixedNumber( 0, Math.Abs(n1_numerator - n2_numerator), denominator, n1.IsPositive);
             }
-            return new MixedNumber(0, Math.Abs(n1_numerator - n2_numerator), denominator, n2.Positive);
+            return new MixedNumber(0, Math.Abs(n1_numerator - n2_numerator), denominator, n2.IsPositive);
         }
 
         public void Deconstruct(out bool sign, out int natural, out int numerator, out int denominator)
         {
-            (sign, natural, numerator, denominator) = (this.Positive, this.Natural, this.Numerator, this.Denominator);
+            (sign, natural, numerator, denominator) = (this.IsPositive, this.Natural, this.Numerator, this.Denominator);
         }
     }
     class Program
@@ -190,10 +192,10 @@ namespace L07_1
             Console.WriteLine(mx1 + mx2);
             Console.WriteLine(mx3 + mx4 + mx5);
 
-            bool s;
-            int num;
-            mx1.Deconstruct(out s, out num, out _, out int dec);
+            var (s, num, _, dec) = mx1;
             Console.WriteLine($"{s} - {num} - {dec}");
+
+            Console.WriteLine(MixedNumber.SimplificationCounter);
         }
     }
 }
