@@ -135,7 +135,7 @@ namespace L08_3
         public int Id { private set; get; }
         public string Name { private set; get; }
 
-        Topic(int id, string name)
+        public Topic(int id, string name)
         {
             Id = id;
             Name = name;
@@ -143,7 +143,7 @@ namespace L08_3
 
         public override string ToString()
         {
-            return $"{Id}".PadLeft(3, '0') + $": {Name}";
+            return $"{Id}".PadLeft(2, '0') + $": {Name}";
         }
 
         public static List<Topic> GenerateListTopic()
@@ -244,18 +244,14 @@ namespace L08_3
         }
 
         //ZAD 2 _____________________________________________________________________________________________________
-        static List<KeyValuePair<string, int>> TopicsCounter(List<StudentWithTopics> students)
+        static List<string> TopicsByMostPopular(List<StudentWithTopics> students)
         {
-            Dictionary<string, int> dictionaryTopics = new Dictionary<string, int>();
-            List<String> allTopicsFlat = students.SelectMany(s => s.Topics).ToList();
-
-            var groups =
-                from t in allTopicsFlat
+            return (
+                from t in students.SelectMany(s => s.Topics)
                 group t by t into g
                 orderby g.Count() descending
-                select new KeyValuePair<string, int>(g.Key, g.Count())
-                ;
-            return groups.ToList();
+                select g.Key
+                ).ToList();
         }
 
         static List<StudentWithTopics> AllWithGender(List<StudentWithTopics> students, Gender enm)
@@ -269,45 +265,77 @@ namespace L08_3
             List<StudentWithTopics> females = AllWithGender(students, Gender.Female);
 
             Console.WriteLine("all --------------");
-            TopicsCounter(students).ForEach(x => Console.WriteLine(x));
+            TopicsByMostPopular(students).ForEach(x => Console.WriteLine(x));
 
             Console.WriteLine("\nmales --------------");
             males.ForEach(Console.WriteLine);
-            TopicsCounter(males).ForEach(x => Console.WriteLine(x));
+            TopicsByMostPopular(males).ForEach(x => Console.WriteLine(x));
 
             Console.WriteLine("\nfemales --------------");
             females.ForEach(Console.WriteLine);
-            TopicsCounter(females).ForEach(x => Console.WriteLine(x));
+            TopicsByMostPopular(females).ForEach(x => Console.WriteLine(x));
         }
 
         //ZAD 3 _____________________________________________________________________________________________________
-        static List<int> StringTopicToId(List<string> topicNames, List<Topic> topics)
+        static IEnumerable<Topic> GetAllTopics(List<StudentWithTopics> studentsWithTopic)
+        {
+            return (
+                from t in studentsWithTopic.SelectMany(s => s.Topics)
+                group t by t into g
+                select g.Key
+                )
+                .Select((topicString, possition) => new Topic(possition, topicString))
+                ;
+        }
+
+        static IEnumerable<int> StringTopicToId(List<string> topicNames, IEnumerable<Topic> topics)
         {
             return topicNames
                 .SelectMany(topicStr => topics.Where(tTopic => tTopic.Name == topicStr))
                 .Select(t => t.Id)
-                .ToList();
+                ;
         }
 
         static List<Student> FromStudentWithTopic(List<StudentWithTopics> studentsWithTopic, List<Topic> topics)
         {
             return studentsWithTopic
                 .Select(s => new Student(s.Id, s.Index, s.Name, s.Gender, s.Active, s.DepartmentId,
-                StringTopicToId(s.Topics, topics)
+                StringTopicToId(s.Topics, topics).ToList()
                     ))
                 .ToList();
         }
 
+        static (List<Student>, List<Topic>) FromStudentWithTopic(List<StudentWithTopics> studentsWithTopic)
+        {
+            return studentsWithTopic.Aggregate((students: new List<Student>(), topics: GetAllTopics(studentsWithTopic).ToList()),
+                (tupp, s) =>
+                {
+                    tupp.students.Add(new Student(s.Id, s.Index, s.Name, s.Gender, s.Active, s.DepartmentId, StringTopicToId(s.Topics, tupp.topics).ToList()));
+                    return tupp;
+                }
+                );
+        }
+
         static void Zad3()
         {
-            List<Topic> topics = Topic.GenerateListTopic();
             List<StudentWithTopics> studentsWithTopic = Generator.GenerateStudentsWithTopicsEasy();
+            studentsWithTopic.ForEach(Console.WriteLine);
+
+            //a.  Dla chętnych – generacja listy tematów poprzez zapytanie 
+            List<Topic> topics = GetAllTopics(studentsWithTopic).ToList();
             List<Student> translatedToStudent = FromStudentWithTopic(studentsWithTopic, topics);
 
-            studentsWithTopic.ForEach(Console.WriteLine);
+            Console.WriteLine("-------------------");
+            topics.ForEach(Console.WriteLine);
             Console.WriteLine("-------------------");
             translatedToStudent.ForEach(Console.WriteLine);
 
+            //b.Dla chętnych – generacja listy tematów i listy nowego typu studentów w jednym zapytaniu.
+            var (translatedToStudent2, topics2) = FromStudentWithTopic(studentsWithTopic);
+            Console.WriteLine("-------------------");
+            topics2.ForEach(Console.WriteLine);
+            Console.WriteLine("-------------------");
+            translatedToStudent2.ForEach(Console.WriteLine);
         }
         static void Main(string[] args)
         {
