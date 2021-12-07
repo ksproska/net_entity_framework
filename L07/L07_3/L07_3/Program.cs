@@ -30,7 +30,7 @@ namespace L07_3
         static void Main(string[] args)
         {
             string str = "some text 124 to change";
-            Console.WriteLine(StringExtended.ChangeCaseEverySecond(str));
+            Console.WriteLine(str.ChangeCaseEverySecond());
         }
     }
 }

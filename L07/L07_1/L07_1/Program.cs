@@ -6,7 +6,7 @@ namespace L07_1
     {
         public bool IsPositive { get; set; }  = true;
         private int natural, numerator, denominator;
-        private const int defNatural = 0, defNumerator = 0, defDenominator = 1;
+        private static int defNatural = 0, defNumerator = 0, defDenominator = 1;
 
         public static int SimplificationCounter { get; private set; }
 
@@ -50,7 +50,7 @@ namespace L07_1
         {
             this.IsPositive = sign;
             this.Natural = 0;
-            int tempNumerator = (int)Math.Floor(Math.Abs(doubleValue*Math.Pow(10, precision)));
+            int tempNumerator = (int)Math.Floor(doubleValue*Math.Pow(10, precision));
             int tempDenumerator = (int)Math.Pow(10, precision);
             numeratorSetterWithDefault(tempNumerator);
             denominatorSetterWithDefault(tempDenumerator);
@@ -99,12 +99,20 @@ namespace L07_1
                     operationsFlag = true;
                 }
             }
+            if (numerator == 0 && natural == 0)
+            {
+                this.IsPositive = true;
+            }
 
             return operationsFlag;
         }
 
         public override string ToString()
         {
+            if (natural == 0 && numerator == 0)
+            {
+                return "0";
+            }
             string sToString = "";
             if (natural != 0 & numerator != 0)
             {
@@ -206,6 +214,12 @@ namespace L07_1
             Console.WriteLine($"\n{s} - {num} - {dec}\n");
 
             Console.WriteLine(MixedNumber.SimplificationCounter);
+
+
+            Console.WriteLine($"\n{new MixedNumber(0) + new MixedNumber(6, 5)}");
+            Console.WriteLine($"{new MixedNumber(10, 3, 2) + new MixedNumber(1, 6)}");
+            Console.WriteLine($"{new MixedNumber(8, 1, 5, false) + new MixedNumber(1, 1, 5, false)}");
+            Console.WriteLine($"{new MixedNumber(10, 7, false) + new MixedNumber(1, 6)}");
         }
     }
 }
