@@ -130,6 +130,7 @@ namespace L08_3
 
     }
 
+    //ZAD 3 _____________________________________________________________________________________________________
     class Topic
     {
         public int Id { private set; get; }
@@ -145,27 +146,8 @@ namespace L08_3
         {
             return $"{Id}".PadLeft(2, '0') + $": {Name}";
         }
-
-        public static List<Topic> GenerateListTopic()
-        {
-            List<Topic> topics = new List<Topic>();
-            foreach(var (id, name) in new (int, string)[] {
-                (1, "algorithms"), 
-                (2, "C#"),
-                (3, "C++"),
-                (4, "fuzzy logic"),
-                (5, "web programming")
-            })
-            {
-                topics.Add(new Topic(id, name));
-            }
-            return topics;
-        }
     }
-    //class StudentToTopic
-    //{
-    //    private List<KeyValuePair<int, int>> =
-    //}
+
     class Student
     {   public int Id { get; set; }
         public int Index { get; set; }
@@ -258,6 +240,12 @@ namespace L08_3
         {
             return students.Where(s => s.Gender == enm).ToList();
         }
+
+        static IEnumerable<(Gender, IEnumerable<StudentWithTopics>)> GetGenderedList(List<StudentWithTopics> students)
+        {
+            var gendered = from s in students group s by s.Gender into Temp select (Temp.Key, from s in students where s.Gender == Temp.Key select s);
+            return gendered;
+        }
         static void Zad2()
         {
             List<StudentWithTopics> students = Generator.GenerateStudentsWithTopicsEasy();
@@ -265,18 +253,30 @@ namespace L08_3
             List<StudentWithTopics> females = AllWithGender(students, Gender.Female);
 
             Console.WriteLine("all --------------");
-            TopicsByMostPopular(students).ForEach(x => Console.WriteLine(x));
+            TopicsByMostPopular(students).ForEach(Console.WriteLine);
 
-            Console.WriteLine("\nmales --------------");
-            males.ForEach(Console.WriteLine);
-            TopicsByMostPopular(males).ForEach(x => Console.WriteLine(x));
+            //Console.WriteLine("\nfemales --------------");
+            //females.ForEach(Console.WriteLine);
+            //TopicsByMostPopular(females).ForEach(Console.WriteLine);
 
-            Console.WriteLine("\nfemales --------------");
-            females.ForEach(Console.WriteLine);
-            TopicsByMostPopular(females).ForEach(x => Console.WriteLine(x));
+            //Console.WriteLine("\nmales --------------");
+            //males.ForEach(Console.WriteLine);
+            //TopicsByMostPopular(males).ForEach(Console.WriteLine);
+
+            IEnumerable<(Gender, IEnumerable<StudentWithTopics>)> gendered = GetGenderedList(students);
+            var genderedTopics = gendered.Select(el => (el.Item1, TopicsByMostPopular(el.Item2.ToList())));
+            //IEnumerable<Tuple<Gender, IEnumerable<Topic>>> genderedTopics = gendered.Select(el => (el.Key, TopicsByMostPopular(gendered.SelectMany(el => el).ToList())));
+
+            foreach (var gender in genderedTopics)
+            {
+                Console.WriteLine("\n--------------");
+                Console.WriteLine(gender.Item1);
+                gender.Item2.ForEach(Console.WriteLine);
+            }
         }
 
         //ZAD 3 _____________________________________________________________________________________________________
+        // a - generacja listy tematów poprzez zapytanie
         static IEnumerable<Topic> GetAllTopics(List<StudentWithTopics> studentsWithTopic)
         {
             return (
@@ -295,7 +295,7 @@ namespace L08_3
                 .Select(t => t.Id)
                 ;
         }
-
+        
         static List<Student> FromStudentWithTopic(List<StudentWithTopics> studentsWithTopic, List<Topic> topics)
         {
             return studentsWithTopic
@@ -304,13 +304,19 @@ namespace L08_3
                     ))
                 .ToList();
         }
-
+        // b - generacja listy tematów i listy nowego typu studentów w jednym zapytaniu
         static (List<Student>, List<Topic>) FromStudentWithTopic(List<StudentWithTopics> studentsWithTopic)
         {
-            return studentsWithTopic.Aggregate((students: new List<Student>(), topics: GetAllTopics(studentsWithTopic).ToList()),
+            return studentsWithTopic.Aggregate((
+                students: new List<Student>(), 
+                topics: studentsWithTopic.SelectMany(s => s.Topics).Distinct().Select((topicString, possition) => new Topic(possition, topicString)).ToList()),
+
                 (tupp, s) =>
                 {
-                    tupp.students.Add(new Student(s.Id, s.Index, s.Name, s.Gender, s.Active, s.DepartmentId, StringTopicToId(s.Topics, tupp.topics).ToList()));
+                    tupp.students.Add(new Student(s.Id, s.Index, s.Name, s.Gender, s.Active, s.DepartmentId, 
+                        s.Topics.SelectMany(topicStr => tupp.topics.Where(tTopic => tTopic.Name == topicStr))
+                        .Select(t => t.Id)
+                        .ToList()));
                     return tupp;
                 }
                 );
@@ -337,11 +343,95 @@ namespace L08_3
             Console.WriteLine("-------------------");
             translatedToStudent2.ForEach(Console.WriteLine);
         }
+
+        //ZAD 3c _____________________________________________________________________________________________________
+        class StudentExtraExcercise
+        {
+            public int Id { get; set; }
+            public int Index { get; set; }
+            public string Name { get; set; }
+            public Gender Gender { get; set; }
+            public bool Active { get; set; }
+            public int DepartmentId { get; set; }
+
+            public StudentExtraExcercise(int id, int index, string name, Gender gender, bool active,
+                int departmentId)
+            {
+                this.Id = id;
+                this.Index = index;
+                this.Name = name;
+                this.Gender = gender;
+                this.Active = active;
+                this.DepartmentId = departmentId;
+            }
+
+            public override string ToString()
+            {
+                var result = $"{Id,2}) {Index,5}, {Name,11}, {Gender,6},{(Active ? "active" : "no active"),9},{DepartmentId,2}";
+                return result;
+            }
+        }
+
+        class StudentToTopic
+        {
+            public int StudentId { get; set; }
+            public int TopicId { get; set; }
+
+            public StudentToTopic(int studentId, int topicId)
+            {
+                StudentId = studentId;
+                TopicId = topicId;
+            }
+
+            public override string ToString()
+            {
+                var result = $"Student: {StudentId}; Topic: {TopicId}";
+                return result;
+            }
+        }
+
+        static (List<StudentExtraExcercise>, List<StudentToTopic>) GetAllStudentExtraExcercise(List<StudentWithTopics> studentsWithTopic, List<Topic> topics)
+        {
+            return studentsWithTopic.Aggregate((
+                students: new List<StudentExtraExcercise>(),
+                topics: new List<StudentToTopic>()),
+
+                (tupp, s) =>
+                {
+                    tupp.students.Add(new StudentExtraExcercise(s.Id, s.Index, s.Name, s.Gender, s.Active, s.DepartmentId));
+                    s.Topics.ForEach(x => tupp.topics.Add(new StudentToTopic(tupp.students[^1].Id, topics.Where(t => t.Name == x).Select(t => t.Id).ToList()[0])));
+                    
+                    return tupp;
+                }
+                );
+            //return studentWithTopics.Select(s => new StudentExtraExcercise(s.Id, s.Index, s.Name, s.Gender, s.Active, s.DepartmentId)).ToList();
+        }
+
+        static void zad3c() {
+            List<StudentWithTopics> studentsWithTopic = Generator.GenerateStudentsWithTopicsEasy();
+            List<Topic> topics = GetAllTopics(studentsWithTopic).ToList();
+            var (studentExtraExcercises, studentToTopicss) = GetAllStudentExtraExcercise(studentsWithTopic, topics);
+
+            studentExtraExcercises.ForEach(Console.WriteLine);
+            studentToTopicss.ForEach(Console.WriteLine);
+        }
+
         static void Main(string[] args)
         {
-            //Zad1();
-            //Zad2();
+            Console.WriteLine("\nZAD 1 -----------------------------------------------------------------------------------------------------");
+            Zad1();
+            Console.WriteLine("\nZAD 2 -----------------------------------------------------------------------------------------------------");
+            Zad2();
+            Console.WriteLine("\nZAD 3 -----------------------------------------------------------------------------------------------------");
             Zad3();
+            Console.WriteLine("\nZAD 3c -----------------------------------------------------------------------------------------------------");
+            zad3c();
+
+            //List<StudentWithTopics> studentsWithTopic = Generator.GenerateStudentsWithTopicsEasy();
+            //List<Topic> topics = 
+            //studentsWithTopic.SelectMany(s => s.Topics).Distinct().Select((topicString, possition) => new Topic(possition, topicString)).ToList();
+            //topics.ForEach(Console.WriteLine);
         }
     }
 }
+ 

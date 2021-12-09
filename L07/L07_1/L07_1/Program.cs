@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace L07_1
 {
@@ -187,39 +188,53 @@ namespace L07_1
     {
         static void Main(string[] args)
         {
-            MixedNumber mx1 = new MixedNumber(4, 3, 35);
-            mx1.Numerator = 5;
-            mx1.PrintAll();
-            MixedNumber mx2 = new MixedNumber(3, 4, 52, false);
-            mx2.PrintAll();
-            MixedNumber mx3 = new MixedNumber(1, 7);
-            mx3.PrintAll();
-            MixedNumber mx4 = new MixedNumber(8, 17, false);
-            mx4.PrintAll();
-            MixedNumber mx5 = new MixedNumber(3);
-            mx5.PrintAll();
-            MixedNumber mx6 = new MixedNumber(5, false);
-            mx6.PrintAll();
-            MixedNumber mx7 = new MixedNumber(3.34);
-            mx7.PrintAll();
-            MixedNumber mx8 = new MixedNumber(5.25304, false);
-            mx8.PrintAll();
-            
-            Console.WriteLine($"\n{mx1} + {mx2} = {mx1 + mx2}");
-            Console.WriteLine($"\n{mx3} + {mx4} + {mx5} = {mx3 + mx4 + mx5}");
-            Console.WriteLine($"\n{mx1} + {mx3} + {mx6} = {mx1 + mx3 + mx6}");
+            //MixedNumber mx1 = new MixedNumber(4, 3, 35);
+            //mx1.Numerator = 5;
+            //mx1.PrintAll();
+            //MixedNumber mx2 = new MixedNumber(3, 4, 52, false);
+            //mx2.PrintAll();
+            //MixedNumber mx3 = new MixedNumber(1, 7);
+            //mx3.PrintAll();
+            //MixedNumber mx4 = new MixedNumber(8, 17, false);
+            //mx4.PrintAll();
+            //MixedNumber mx5 = new MixedNumber(3);
+            //mx5.PrintAll();
+            //MixedNumber mx6 = new MixedNumber(5, false);
+            //mx6.PrintAll();
+            //MixedNumber mx7 = new MixedNumber(3.34);
+            //mx7.PrintAll();
+            //MixedNumber mx8 = new MixedNumber(5.25304, false);
+            //mx8.PrintAll();
 
-            var (s, num, _, dec) = mx1;
-            
-            Console.WriteLine($"\n{s} - {num} - {dec}\n");
+            //Console.WriteLine($"\n{mx1} + {mx2} = {mx1 + mx2}");
+            //Console.WriteLine($"\n{mx3} + {mx4} + {mx5} = {mx3 + mx4 + mx5}");
+            //Console.WriteLine($"\n{mx1} + {mx3} + {mx6} = {mx1 + mx3 + mx6}");
 
-            Console.WriteLine(MixedNumber.SimplificationCounter);
+            //var (s, num, _, dec) = mx1;
+
+            //Console.WriteLine($"\n{s} - {num} - {dec}\n");
+
+            //Console.WriteLine(MixedNumber.SimplificationCounter);
 
 
-            Console.WriteLine($"\n{new MixedNumber(0) + new MixedNumber(6, 5)}");
-            Console.WriteLine($"{new MixedNumber(10, 3, 2) + new MixedNumber(1, 6)}");
-            Console.WriteLine($"{new MixedNumber(8, 1, 5, false) + new MixedNumber(1, 1, 5, false)}");
-            Console.WriteLine($"{new MixedNumber(10, 7, false) + new MixedNumber(1, 6)}");
+            //Console.WriteLine($"\n{new MixedNumber(0) + new MixedNumber(6, 5)}");
+            //Console.WriteLine($"{new MixedNumber(10, 3, 2) + new MixedNumber(1, 6)}");
+            //Console.WriteLine($"{new MixedNumber(8, 1, 5, false) + new MixedNumber(1, 1, 5, false)}");
+
+            MixedNumber x = new MixedNumber(0);
+            ConstructorInfo firstConstructor = typeof(MixedNumber).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(bool) });
+            ConstructorInfo secondConstructor = typeof(MixedNumber).GetConstructor(new Type[] { typeof(int), typeof(bool)});
+            MixedNumber firstMixed = (MixedNumber)firstConstructor.Invoke(new object[] { 10, 7, false });
+            MixedNumber secondMixed = (MixedNumber)secondConstructor.Invoke(new object[] { 1, true});
+
+            MethodInfo adding = firstMixed.GetType().GetMethod("op_Addition", new Type[] { typeof(MixedNumber), typeof(MixedNumber) });
+            Console.WriteLine(adding);
+
+            MixedNumber result = (MixedNumber)adding.Invoke(firstMixed, new object[] { firstMixed, secondMixed });
+            Console.WriteLine(firstMixed);
+            Console.WriteLine(secondMixed);
+            Console.WriteLine($"Result = {result}");
+
         }
     }
 }
