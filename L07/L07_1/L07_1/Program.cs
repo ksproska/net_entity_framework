@@ -221,16 +221,18 @@ namespace L07_1
             //Console.WriteLine($"{new MixedNumber(10, 3, 2) + new MixedNumber(1, 6)}");
             //Console.WriteLine($"{new MixedNumber(8, 1, 5, false) + new MixedNumber(1, 1, 5, false)}");
 
-            MixedNumber x = new MixedNumber(0);
+            //MixedNumber x = new MixedNumber(0);
+
             ConstructorInfo firstConstructor = typeof(MixedNumber).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(bool) });
             ConstructorInfo secondConstructor = typeof(MixedNumber).GetConstructor(new Type[] { typeof(int), typeof(bool)});
-            MixedNumber firstMixed = (MixedNumber)firstConstructor.Invoke(new object[] { 10, 7, false });
-            MixedNumber secondMixed = (MixedNumber)secondConstructor.Invoke(new object[] { 1, true});
+
+            var firstMixed = firstConstructor.Invoke(new object[] { 10, 7, false });
+            var secondMixed = secondConstructor.Invoke(new object[] { 1, true});
 
             MethodInfo adding = firstMixed.GetType().GetMethod("op_Addition", new Type[] { typeof(MixedNumber), typeof(MixedNumber) });
             Console.WriteLine(adding);
 
-            MixedNumber result = (MixedNumber)adding.Invoke(firstMixed, new object[] { firstMixed, secondMixed });
+            var result = adding.Invoke(firstMixed, new object[] { firstMixed, secondMixed });
             Console.WriteLine(firstMixed);
             Console.WriteLine(secondMixed);
             Console.WriteLine($"Result = {result}");
