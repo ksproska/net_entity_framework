@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Zad 1";
+}
+<h2>@ViewBag.Title</h2>
+<h3>f(x) = @ViewData["equation"]</h3>
+<p class="@ViewBag.cls">Liczba pierwiastków: @ViewData["nrOfResults"]</p>
+<ul id="results">
+    @foreach (var result in ViewData["results"] as List<double>)
+    {
+        <li> 
+            @result
+        </li>
+    }
+</ul>

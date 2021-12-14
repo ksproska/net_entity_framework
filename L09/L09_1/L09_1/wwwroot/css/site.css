@@ -1,6 +1,26 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+p.infinity {
+    color: blue;
+    font-size: 30px;
+}
+
+p.t0 {
+    color: yellow;
+    font-size: 15px;
+}
+
+p.t1 {
+    color: green;
+    font-size: 20px;
+}
+
+p.t2 {
+    color: red;
+    font-size: 25px;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;

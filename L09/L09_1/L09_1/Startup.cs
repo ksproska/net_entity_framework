@@ -49,6 +49,11 @@ namespace L09_1
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "Z1",
+                    pattern: "Tool/Solve/{iA}/{iB}/{iC}",
+                    defaults: new { controller = "Home", action = "Zad1" });
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
