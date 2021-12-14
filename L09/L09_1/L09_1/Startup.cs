@@ -54,6 +54,21 @@ namespace L09_1
                     defaults: new { controller = "Home", action = "Zad1" });
 
                 endpoints.MapControllerRoute(
+                    name: "Set",
+                    pattern: "Set,{maxVal}",
+                    defaults: new { controller = "Home", action = "Set" });
+
+                endpoints.MapControllerRoute(
+                    name: "Draw",
+                    pattern: "Draw",
+                    defaults: new { controller = "Home", action = "Draw" });
+
+                endpoints.MapControllerRoute(
+                    name: "Guess",
+                    pattern: "Guess,{clientGuess}",
+                    defaults: new { controller = "Home", action = "Guess" });
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });

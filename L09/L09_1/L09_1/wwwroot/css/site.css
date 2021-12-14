@@ -21,6 +21,26 @@ p.t2 {
     font-size: 25px;
 }
 
+h2.little {
+    color: dodgerblue;
+    font-size: 30px;
+}
+
+h2.much {
+    color: orangered;
+    font-size: 30px;
+}
+
+h2.bingo {
+    color: green;
+    font-size: 30px;
+}
+
+h2.error {
+    color: red;
+    font-size: 30px;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
