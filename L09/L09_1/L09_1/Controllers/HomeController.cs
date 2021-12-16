@@ -35,7 +35,7 @@ namespace L09_1.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
+        [Route("Tool/Solve/{iA}/{iB}/{iC}")]
         public IActionResult Zad1(int iA, int iB, int iC)
         {
             ViewData["equation"] = Zad1prev.Zad1prev.GetEquation(iA, iB, iC);
@@ -70,6 +70,7 @@ namespace L09_1.Controllers
             {
                 ViewBag.Message = $"Value must be greater than 0.";
                 ViewBag.Cls = "error";
+                var maxAsString = TempData["max"];
             }
             else
             {
@@ -77,7 +78,7 @@ namespace L09_1.Controllers
                 TempData["max"] = maxVal;
             }
             
-            return View();
+            return View("Zad2");
         }
 
         public IActionResult Draw()
@@ -95,7 +96,7 @@ namespace L09_1.Controllers
                 TempData["count"] = 0;
                 ViewBag.Message = "Draw successful.";
             }
-            return View();
+            return View("Zad2");
         }
 
         public IActionResult Guess(int clientGuess)

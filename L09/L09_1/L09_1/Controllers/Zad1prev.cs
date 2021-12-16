@@ -89,25 +89,55 @@ namespace Zad1prev
         public static String GetEquation(double iA, double iB, double iC)
         {
             String equ = "";
-            if (iA != 0)
+            if (iA != 0 && Math.Abs(iA) != 1)
             {
                 equ = $"{iA}x^2";
+            }
+            else if(iA != 0)
+            {
+                equ = $"x^2";
+                if(iA == -1)
+                {
+                    equ = $"-x^2";
+                }
             }
             if (iB != 0)
             {
                 if (equ.Length > 0)
                 {
-                    equ += " + ";
+                    if(iB > 0)
+                    {
+                        equ += " + ";
+                    }
+                    else
+                    {
+                        equ += " - ";
+                    }
                 }
-                equ += $"{iB}x";
+                if(Math.Abs(iB) != 1)
+                {
+                    equ += $"{Math.Abs(iB)}x";
+                }
+                else
+                {
+                    equ += $"x";
+                }
             }
             if (iC != 0)
             {
                 if (equ.Length > 0)
                 {
-                    equ += " + ";
+                    if (iC > 0)
+                    {
+                        equ += " + ";
+                    }
+
+                    else
+                    {
+                        equ += " - ";
+                    }
                 }
-                equ += $"{iC}";
+                equ += $"{Math.Abs(iC)}";
             }
             if (equ.Length == 0)
             {
