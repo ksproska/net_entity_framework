@@ -1,3 +1,4 @@
+using L10_1.ViewModels.DataContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace L09_1
+namespace L10_1
 {
     public class Startup
     {
@@ -24,6 +25,7 @@ namespace L09_1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddSingleton<IDataContext, MockDataContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,26 +50,6 @@ namespace L09_1
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllerRoute(
-                //    name: "Z1",
-                //    pattern: "Tool/Solve/{iA}/{iB}/{iC}",
-                //    defaults: new { controller = "Home", action = "Zad1" });
-
-                endpoints.MapControllerRoute(
-                    name: "Set",
-                    pattern: "Set,{maxVal}",
-                    defaults: new { controller = "Game", action = "Set" });
-
-                endpoints.MapControllerRoute(
-                    name: "Draw",
-                    pattern: "Draw",
-                    defaults: new { controller = "Game", action = "Draw" });
-
-                endpoints.MapControllerRoute(
-                    name: "Guess",
-                    pattern: "Guess,{clientGuess}",
-                    defaults: new { controller = "Game", action = "Guess" });
-
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
