@@ -9,12 +9,14 @@ namespace L10_1.ViewModels.DataContext
     {
         List<ArticleViewModel> GetArticles();
         //List<ArticleViewModel> GetArticles(CategoryViewModel category);
+        ArticleViewModel GetArticle(int id);
         List<CategoryViewModel> GetCategories();
         void AddArticle(ArticleViewModel article);
         ////void RemoveArticle(int id);
-        //void UpdateArticle(ArticleViewModel article);
+        void UpdateArticle(ArticleViewModel article);
         void AddCategory(CategoryViewModel category);
         void UpdateCategory(CategoryViewModel category);
-        //void RemoveCategory(string name);
+        void RemoveCategory(CategoryViewModel category);
+        public void RemoveArticle(int id);
     }
 }

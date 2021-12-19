@@ -61,10 +61,12 @@ namespace L10_1.Controllers
         // POST: CategoryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(CategoryViewModel category)
         {
             try
             {
+                if (ModelState.IsValid)
+                    _dataContext.AddCategory(category);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -82,10 +84,12 @@ namespace L10_1.Controllers
         // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(CategoryViewModel category)
         {
             try
             {
+                if (ModelState.IsValid)
+                    _dataContext.RemoveCategory(category);
                 return RedirectToAction(nameof(Index));
             }
             catch

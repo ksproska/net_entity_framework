@@ -12,7 +12,7 @@ namespace L10_1.ViewModels
 
         [Required]
         [MinLength(1, ErrorMessage = "To short category name")]
-        [Display(Name = "Category")]
+        //[Display(Name = "Category")]
         [MaxLength(20, ErrorMessage = " To long category name, do not exceed {1}")]
         public string Name { get; set; }
 
