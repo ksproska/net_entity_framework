@@ -24,9 +24,9 @@ namespace L10_1.Controllers
         }
 
         // GET: CategoryController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string name)
         {
-            return View();
+            return View(_dataContext.GetCategory(name));
         }
 
         // GET: CategoryController/Create
@@ -53,20 +53,20 @@ namespace L10_1.Controllers
         }
 
         // GET: CategoryController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string name)
         {
-            return View();
+            return View(_dataContext.GetCategory(name));
         }
 
         // POST: CategoryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CategoryViewModel category)
+        public ActionResult Edit(string oldName, CategoryViewModel category)
         {
             try
             {
                 if (ModelState.IsValid)
-                    _dataContext.AddCategory(category);
+                    _dataContext.UpdateCategory(oldName, category);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -76,9 +76,9 @@ namespace L10_1.Controllers
         }
 
         // GET: CategoryController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string name)
         {
-            return View();
+            return View(_dataContext.GetCategory(name));
         }
 
         // POST: CategoryController/Delete/5

@@ -35,10 +35,12 @@
             @Html.DisplayFor(model => model.getCategory().Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
+            @Html.DisplayNameFor(model => model.FormFile)
         </dt>
         <dd class="col-sm-10">
-            <img src="@Html.DisplayFor(model => model.ImagePath)" onerror="this.onerror=null; this.src='/image/no_image.jpg'" />
+            <img src="@Html.DisplayFor(model => model.PhotoPath)"
+                 @*onerror="this.onerror=null; this.src='/image/no_image.jpg'"*@ 
+                 />
         </dd>
     </dl>
 </div>

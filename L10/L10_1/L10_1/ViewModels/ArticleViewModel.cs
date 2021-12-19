@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace L10_1.ViewModels
 {
     public class ArticleViewModel
     {
+        public static string UPLOAD = "upload";
+        public static string IMAGE = "image";
         public static List<CategoryViewModel> AllCategories = new List<CategoryViewModel>() { };
-        public static List<CategoryViewModel> GetAll()
-        {
-            return AllCategories;
-        }
         public List<CategoryViewModel> GetAllCategories()
         {
             return AllCategories;
@@ -30,9 +30,14 @@ namespace L10_1.ViewModels
         [Required]
         [Display(Name = "Category")]
         public int CategoryInx { get; set; }
-        [Required]
+        
         [Display(Name = "Image")]
-        public string ImagePath { get; set; }
+        public IFormFile FormFile { get; set; }
+
+        public string PhotoPath
+        {
+            get { return FormFile != null ? Path.Combine("\\" + UPLOAD, FormFile.FileName) : "/image/no_image.jpg"; }
+        }
 
         public CategoryViewModel getCategory()
         {
@@ -46,19 +51,19 @@ namespace L10_1.ViewModels
         //    this.Name = name;
         //    this.Price = price;
         //    this.Category = category;
-        //    this.ImagePath = imgPath;
+        //    this.FormFile = imgPath;
         //    if(!AllCategories.Contains(category))
         //    {
         //        AllCategories.Add(category);
         //    }
         //}
 
-        public ArticleViewModel(string name, double price, int categoryInx, string imgPath)
+        public ArticleViewModel(string name, double price, int categoryInx, IFormFile formFile)
         {
             this.Name = name;
             this.Price = price;
             this.CategoryInx = categoryInx;
-            this.ImagePath = imgPath;
+            this.FormFile = formFile;
         }
     }
 }

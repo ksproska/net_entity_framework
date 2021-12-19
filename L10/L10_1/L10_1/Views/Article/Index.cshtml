@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.CategoryInx)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ImagePath)
+                @Html.DisplayNameFor(model => model.FormFile)
             </th>
             <th></th>
         </tr>
@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.getCategory().Name)
             </td>
             <td>
-                <img src="@item.ImagePath" height="80" onerror="this.onerror=null; this.src='/image/no_image.jpg'"/>
+                <img src="@Html.DisplayFor(modelItem => item.PhotoPath)" height="80" />
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

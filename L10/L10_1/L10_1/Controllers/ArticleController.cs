@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace L10_1.Controllers
 {
@@ -36,8 +37,7 @@ namespace L10_1.Controllers
         // GET: ArticleController/Create
         public ActionResult Create()
         {
-            //string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, "upload");
-            return View(new ArticleViewModel());
+            return View();
         }
 
         // POST: ArticleController/Create
@@ -48,7 +48,25 @@ namespace L10_1.Controllers
             try
             {
                 if (ModelState.IsValid)
+                {
+                    var formfile = article.FormFile;
+
+                    if (formfile != null)
+                    {
+                        var filename = formfile.FileName;
+
+                        var newName = Guid.NewGuid().ToString() + filename;
+                        string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, _dataContext.GetPhotosDestinationFile());
+                        using (FileStream DestinationStream = System.IO.File.Create(Path.Combine(uploadFolder, newName)))
+                        {
+                            formfile.CopyTo(DestinationStream);
+                            article.FormFile = new FormFile(formfile.OpenReadStream(), 
+                                formfile.Length, formfile.Length, formfile.Name, 
+                                newName);
+                        }
+                    }
                     _dataContext.AddArticle(article);
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -93,7 +111,8 @@ namespace L10_1.Controllers
         {
             try
             {
-                _dataContext.RemoveArticle(id);
+                string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, _dataContext.GetPhotosDestinationFile());
+                _dataContext.RemoveArticle(id, uploadFolder);
                 return RedirectToAction(nameof(Index));
             }
             catch

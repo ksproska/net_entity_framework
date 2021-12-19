@@ -9,21 +9,29 @@ namespace L10_1.ViewModels.DataContext
     public class MockDataContext : IDataContext
     {
         List<ArticleViewModel> articles;
+        public string uploadFolder;
+        //public static string UPLOAD = "upload";
+        //public static string IMAGE = "image";
 
         public MockDataContext()
         {
             ArticleViewModel.AllCategories = new List<CategoryViewModel>
             {
-                new CategoryViewModel("cat1"),
-                new CategoryViewModel("cat2")
+                new CategoryViewModel("tools"),
+                new CategoryViewModel("toys"),
+                new CategoryViewModel("painting"),
+                new CategoryViewModel("food")
             };
+            //string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, "upload");
             articles = new List<ArticleViewModel>() { };
-            this.AddArticle(new ArticleViewModel("art1", 1.5, 1, "/image/Z1.png"));
-            this.AddArticle(new ArticleViewModel("art2", 1.5, 0, ""));
-            this.AddArticle(new ArticleViewModel("art3", 3.3, 1, "/image/Z2.png"));
+
+            this.AddArticle(new ArticleViewModel("car", 1.5, 1, null));
+            this.AddArticle(new ArticleViewModel("screwdriver", 1.5, 0, null));
+            this.AddArticle(new ArticleViewModel("doll", 3.3, 1, null));
+            this.AddArticle(new ArticleViewModel("apple", 3.3, 3, null));
         }
 
-        public void AddArticle(ArticleViewModel article)
+        public void AddArticle(ArticleViewModel article) 
         {
             int nextNumber = articles.Count > 0 ? articles.Max(s => s.Id) + 1 : 0;
             article.Id = nextNumber;
@@ -50,35 +58,67 @@ namespace L10_1.ViewModels.DataContext
             return ArticleViewModel.AllCategories;
         }
 
-        public void RemoveArticle(int id)
+        public void RemoveArticle(int id, string uploadFile)
         {
             var article = GetArticle(id);
             articles.Remove(article);
-            //if (File.Exists($"wwwroot{article.ImagePath}"))
-            //{
-            //    File.Delete($"wwwroot{article.ImagePath}");
-            //}
-
+            if(article.FormFile != null)
+            {
+                string path = Path.GetFullPath(Path.Combine(uploadFile, article.FormFile.FileName));
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
         }
 
         public void RemoveCategory(CategoryViewModel category)
         {
-            throw new NotImplementedException();
+            int inx = ArticleViewModel.AllCategories.IndexOf(category);
+            foreach(var a in articles)
+            {
+                if(a.Id > inx)
+                {
+                    a.Id -= 1;
+                }
+            }
+            ArticleViewModel.AllCategories.RemoveAt(inx);
         }
 
         public void UpdateArticle(ArticleViewModel article)
         {
             ArticleViewModel articleToUpdate = articles.FirstOrDefault(s => s.Id == article.Id);
-            article.ImagePath = articleToUpdate.ImagePath;
+            article.FormFile = articleToUpdate.FormFile;
             articles = articles.Select(s => (s.Id == article.Id) ? article : s).ToList();
         }
 
-        public void UpdateCategory(CategoryViewModel category)
+        public void UpdateCategory(string oldName, CategoryViewModel category)
         {
-            CategoryViewModel categoryToUpdate = ArticleViewModel.AllCategories.FirstOrDefault(s => s.Name == category.Name);
-            ArticleViewModel.AllCategories = ArticleViewModel.AllCategories.Select(s => (s.Name == category.Name) ? category : s).ToList();
+            CategoryViewModel cat = GetCategory(oldName);
+            cat.Name = category.Name;
         }
 
+        public string GetPhotosDestinationFile()
+        {
+            return ArticleViewModel.UPLOAD;
+        }
 
+        public bool DoesCategoryExist(string name)
+        {
+            var matches = ArticleViewModel.AllCategories.Where(p => p.Name == name).ToList();
+            return matches.Count > 0;
+        }
+
+        public bool IsCategoryUsed(int inx)
+        {
+            var matches = articles.Where(p => p.CategoryInx == inx).ToList();
+            return matches.Count > 0;
+        }
+
+        public CategoryViewModel GetCategory(string name)
+        {
+            CategoryViewModel cat = ArticleViewModel.AllCategories.FirstOrDefault(s => s.Name == name);
+            return cat;
+        }
     }
 }
