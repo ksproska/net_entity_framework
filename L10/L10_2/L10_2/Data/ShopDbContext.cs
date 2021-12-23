@@ -12,7 +12,7 @@ namespace L10_2.Data
     {
         public ShopDbContext(DbContextOptions<ShopDbContext> options):base(options) { }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Article> Articles { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Article> Article { get; set; }
     }
 }
