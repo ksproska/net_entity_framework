@@ -1,0 +1,104 @@
+﻿@model IEnumerable<L10_1.ViewModels.ArticleViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<p>
+    <ul class="navbar-nav flex-grow-1">
+        @for (int index = 0; index < ArticleViewModel.AllCategories.Count; index++)
+        {
+            var category = ArticleViewModel.AllCategories[index];
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Shop" asp-action="Index" asp-route-id="@index">@category.Name</a>
+            </li>
+        }
+    </ul>
+</p>
+@*<link href="~/css/site.css" rel="stylesheet" type="text/css">*@
+    @*<nav class="menu cool_style_menu">Categories
+        <ul class="menu_p1">
+            @for (int index = 0; index < ArticleViewModel.AllCategories.Count; index++)
+            {
+                var category = ArticleViewModel.AllCategories[index];
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="Shop" asp-route-id="@index">@category.Name</a>
+                </li>
+            }
+        </ul>
+    </nav>*@
+
+
+@*<label class="control-label"></label>
+<div class="sidenav">
+    @for (int index = 0; index < ArticleViewModel.AllCategories.Count; index++)
+    {
+        var category = ArticleViewModel.AllCategories[index];
+        <a class="nav-link text-dark" asp-controller="Shop" asp-route-id="@index">@category.Name</a>
+
+    }
+</div>*@
+@*<form asp-action="Filtered">
+    <select asp-route-id="this.value" class="custom-select">
+        <option value="">Please select</option>
+        @for (int index = 0; index < ArticleViewModel.AllCategories.Count; index++)
+        {
+            var category = ArticleViewModel.AllCategories[index];
+
+            <option value="@index" asp-controller="Shop" asp-route-id="@index">@category.Name</option>
+        }
+    </select>
+</form>*@
+@*<input type="submit" />
+    <p>
+        <a asp-route-id="1">Get Filtered</a>
+        <a asp-route="Shop" asp-route-id="1">xx</a>
+        @Html.ActionLink("Filtered", "Index", new { inx = 1 });
+        <a asp-action="Create">Create New</a>
+    </p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryInx)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhotoPath)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.getCategory().Name)
+                </td>
+                <td>
+                    <img src="@Html.DisplayFor(modelItem => item.PhotoPath)" height="80" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

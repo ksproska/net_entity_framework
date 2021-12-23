@@ -25,6 +25,7 @@ namespace L10_1.ViewModels
         public string Name { get; set; }
         [Required]
         [Range(0.0, double.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
+        [DataType(DataType.Currency)]
         //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:N}")]
         public double Price { get; set; }
         [Required]

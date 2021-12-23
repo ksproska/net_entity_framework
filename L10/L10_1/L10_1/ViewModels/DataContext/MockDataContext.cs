@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using L10_1.ViewModels;
 
 namespace L10_1.ViewModels.DataContext
 {
     public class MockDataContext : IDataContext
     {
+        public ShopViewModel shopViewModel = new ShopViewModel();
         List<ArticleViewModel> articles;
         public string uploadFolder;
         //public static string UPLOAD = "upload";
@@ -72,17 +74,22 @@ namespace L10_1.ViewModels.DataContext
             }
         }
 
-        public void RemoveCategory(CategoryViewModel category)
+        public void RemoveCategory(string name)
         {
-            int inx = ArticleViewModel.AllCategories.IndexOf(category);
-            foreach(var a in articles)
+            var cat = ArticleViewModel.AllCategories.FirstOrDefault(s => s.Name.Equals(name));
+            int inx = ArticleViewModel.AllCategories.IndexOf(cat);
+            if (GetArticles(inx).Count == 0 && inx != -1)
             {
-                if(a.Id > inx)
+                foreach(var a in articles)
                 {
-                    a.Id -= 1;
+                    if(a.CategoryInx > inx)
+                    {
+                        a.CategoryInx -= 1;
+                    }
                 }
+                ArticleViewModel.AllCategories.RemoveAt(inx);
             }
-            ArticleViewModel.AllCategories.RemoveAt(inx);
+            
         }
 
         public void UpdateArticle(ArticleViewModel article)
@@ -119,6 +126,23 @@ namespace L10_1.ViewModels.DataContext
         {
             CategoryViewModel cat = ArticleViewModel.AllCategories.FirstOrDefault(s => s.Name == name);
             return cat;
+        }
+
+        public List<ArticleViewModel> GetArticles(int id)
+        {
+            var matches = articles.Where(p => p.CategoryInx == id).ToList();
+            return matches;
+        }
+
+        public ShopViewModel GetShopViewModel()
+        {
+            return shopViewModel;
+        }
+
+        public bool IsCategoryUsed(CategoryViewModel category)
+        {
+            int inx = ArticleViewModel.AllCategories.IndexOf(category);
+            return GetArticles(inx).Count != 0;
         }
     }
 }

@@ -1,0 +1,10 @@
+﻿@model L10_1.ViewModels.ArticleViewModel
+@{
+    <tr>
+        <td>@Model.Id</td>
+        <td>@Model.Name</td>
+        <td>@Model.Price</td>
+        <td>@Model.getCategory().Name</td>
+        <td><img src="@Model.PhotoPath" height="80" /></td>
+    </tr>
+}

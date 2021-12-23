@@ -7,8 +7,9 @@ namespace L10_1.ViewModels.DataContext
 {
     public interface IDataContext
     {
+        List<ArticleViewModel> GetArticles(int id);
         List<ArticleViewModel> GetArticles();
-        //List<ArticleViewModel> GetArticles(CategoryViewModel category);
+        ShopViewModel GetShopViewModel();
         
         ArticleViewModel GetArticle(int id);
         void AddArticle(ArticleViewModel article);
@@ -19,7 +20,8 @@ namespace L10_1.ViewModels.DataContext
         CategoryViewModel GetCategory(string name);
         void AddCategory(CategoryViewModel category);
         void UpdateCategory(string oldName, CategoryViewModel category);
-        void RemoveCategory(CategoryViewModel category);
+        void RemoveCategory(string name);
+        bool IsCategoryUsed(CategoryViewModel category);
 
         string GetPhotosDestinationFile();
 

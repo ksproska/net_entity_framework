@@ -78,18 +78,20 @@ namespace L10_1.Controllers
         // GET: CategoryController/Delete/5
         public ActionResult Delete(string name)
         {
+            if (_dataContext.IsCategoryUsed(_dataContext.GetCategory(name))) {
+                return View("CannotDelete");
+            }
             return View(_dataContext.GetCategory(name));
         }
 
         // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(CategoryViewModel category)
+        public ActionResult Delete(string name, IFormCollection collection)
         {
             try
             {
-                if (ModelState.IsValid)
-                    _dataContext.RemoveCategory(category);
+                _dataContext.RemoveCategory(name);
                 return RedirectToAction(nameof(Index));
             }
             catch

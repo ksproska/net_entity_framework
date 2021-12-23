@@ -1,0 +1,46 @@
+﻿@model IEnumerable<L10_1.ViewModels.ArticleViewModel>
+
+@{
+    ViewData["Title"] = "Filtered";
+}
+
+<h1>Filtered</h1>
+
+<p>
+    <ul class="navbar-nav flex-grow-1">
+        @for (int index = 0; index < ArticleViewModel.AllCategories.Count; index++)
+        {
+            var category = ArticleViewModel.AllCategories[index];
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Shop" asp-action="Index" asp-route-id="@index">@category.Name</a>
+            </li>
+        }
+    </ul>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryInx)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhotoPath)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            await Html.RenderPartialAsync("_Article", item);
+        }
+    </tbody>
+</table>

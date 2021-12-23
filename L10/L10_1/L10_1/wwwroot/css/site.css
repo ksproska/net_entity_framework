@@ -69,3 +69,80 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+
+/* cool style for menu __________________________________________________________________________________*/
+.cool_style_menu {
+    background-color: rgb(32, 0, 150);
+    color: white;
+}
+
+.cool_style_menu, nav.cool_style_menu > ul {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+}
+
+.cool_style_menu ul li {
+    background-color: rgb(41, 44, 216);
+}
+
+.cool_style_menu ul > li {
+    border: black 1px solid;
+}
+
+nav.cool_style_menu > ul {
+    font-size: 25px;
+}
+
+.cool_style_menu ul li > a {
+    text-decoration: none;
+    font-style: italic;
+    color: rgb(147, 117, 173);
+}
+
+.cool_style_menu ul li a:hover {
+    color: rgb(31, 10, 49);
+}
+
+.cool_style_menu ul > li {
+    list-style: none;
+}
+
+.cool_style_menu ul li ul li {
+    background-color: rgb(14, 90, 177);
+}
+
+.cool_style_menu ul li:hover {
+    background-color: rgb(56, 138, 138);
+}
+
+/* menu _________________________________________________________________________________________________*/
+nav.menu {
+    font-size: 33px;
+    width: 250px;
+    position: fixed;
+}
+
+nav.menu ul.menu_p1 {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav.menu ul.menu_p1 li ul {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav.menu:hover ul.menu_p1 {
+    display: block;
+}
+
+nav.menu ul.menu_p1 li:hover ul {
+    display: block;
+    position: fixed;
+    margin-top: -20px;
+    margin-left: 230px;
+    width: 200px;
+}
