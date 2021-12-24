@@ -28,7 +28,7 @@ namespace L10_2
             services.AddControllersWithViews();
             services.AddDbContextPool<ShopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("ShopDb")));
-
+            // todo check if necessery:
             // services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
         }
 

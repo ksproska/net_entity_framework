@@ -16,6 +16,7 @@ namespace L10_2.ViewModels
         [NotMapped]
         public static string DefaultImage = "/image/no_image.jpg";
         
+        [Required]
         public int Id { get; set; }
 
         [Required]
@@ -37,6 +38,7 @@ namespace L10_2.ViewModels
 
         public string ImageFilename { get; set; }
 
+        [NotMapped]
         public string PhotoRelativePath
         {
             get { return !ImageFilename.Equals("") ? Path.Combine("\\" + UPLOAD, ImageFilename) : DefaultImage; }
