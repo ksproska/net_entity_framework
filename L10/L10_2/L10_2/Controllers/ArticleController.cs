@@ -118,6 +118,9 @@ namespace L10_2.Controllers
             {
                 try
                 {
+                    // todo
+                    var local = await _context.Article.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+                    article.ImageFilename = local.ImageFilename;
                     _context.Update(article);
                     await _context.SaveChangesAsync();
                 }
@@ -163,6 +166,16 @@ namespace L10_2.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var article = await _context.Article.FindAsync(id);
+            if (article.ImageFilename != "")
+            {
+                string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, "upload");
+                string path = Path.GetFullPath(Path.Combine(uploadFolder, article.ImageFilename));
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
+            }
+
             _context.Article.Remove(article);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
