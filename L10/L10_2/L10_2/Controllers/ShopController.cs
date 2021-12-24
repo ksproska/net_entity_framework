@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using L10_2.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace L10_2.Controllers
 {
@@ -20,6 +21,8 @@ namespace L10_2.Controllers
         public async Task<IActionResult> Index()
         {
             var shopContextAll = _context.Article.Include(a => a.Category);
+            ViewData["CategoryList"] = new SelectList(_context.Category, "Id", "Name");
+            //ViewData["SelectedId"] = -1;
             return View(await shopContextAll.ToListAsync());
         }
 
@@ -29,6 +32,8 @@ namespace L10_2.Controllers
             var shopContextFiltered = _context.Article
                 .Where<Article>(item => item.CategoryId == CategoryId)
                 .Include(a => a.Category);
+            ViewData["CategoryList"] = new SelectList(_context.Category, "Id", "Name");
+            //ViewData["SelectedId"] = CategoryId;
             return View("Index", await shopContextFiltered.ToListAsync());
         }
     }
