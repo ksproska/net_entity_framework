@@ -36,12 +36,13 @@ namespace L10_2.ViewModels
         [NotMapped]
         public IFormFile FormFile { get; set; }
 
+        [Display(Name = "Image")]
         public string ImageFilename { get; set; }
 
         [NotMapped]
         public string PhotoRelativePath
         {
-            get { return !ImageFilename.Equals("") ? Path.Combine("\\" + UPLOAD, ImageFilename) : DefaultImage; }
+            get { return ImageFilename != null && !ImageFilename.Equals("") ? Path.Combine("\\" + UPLOAD, ImageFilename) : DefaultImage; }
         }
 
         public Article() { }
@@ -62,5 +63,15 @@ namespace L10_2.ViewModels
 
         public Article(string name, double price, Category category)
             : this(-1, name, price, category, "") { }
+
+        public Article(int id, string name, double price, Category category, IFormFile formfile)
+            : this(id, name, price, category, formfile != null ? formfile.FileName : "") {
+            this.FormFile = formfile;
+        }
+
+        public Article(string name, double price, Category category, IFormFile formfile)
+            : this(-1, name, price, category, formfile != null ? formfile.FileName : "") {
+            this.FormFile = formfile;
+        }
     }
 }
