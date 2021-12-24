@@ -42,7 +42,7 @@ namespace L10_2.ViewModels
         [NotMapped]
         public string PhotoRelativePath
         {
-            get { return ImageFilename != null && !ImageFilename.Equals("") ? Path.Combine("\\" + UPLOAD, ImageFilename) : DefaultImage; }
+            get { return ImageFilename != null && !ImageFilename.Equals("") ? "/" + UPLOAD + "/" + ImageFilename : DefaultImage; }
         }
 
         public Article() { }

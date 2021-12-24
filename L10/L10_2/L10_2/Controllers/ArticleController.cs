@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using L10_2.Data;
 using L10_2.ViewModels;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace L10_2.Controllers
 {
     public class ArticleController : Controller
     {
         private readonly ShopDbContext _context;
+        private IHostingEnvironment _hostingEnviroment;
 
-        public ArticleController(ShopDbContext context)
+        public ArticleController(ShopDbContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnviroment = hostingEnvironment;
         }
 
         // GET: Article
@@ -61,7 +65,18 @@ namespace L10_2.Controllers
         {
             if (ModelState.IsValid)
             {
-                article.ImageFilename = article.FormFile.FileName;
+                var formfile = article.FormFile;
+                if (formfile != null)
+                {
+                    var filename = formfile.FileName;
+                    var newName = Guid.NewGuid().ToString() + filename;
+                    string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, "upload");
+                    using (FileStream DestinationStream = System.IO.File.Create(Path.Combine(uploadFolder, newName)))
+                    {
+                        formfile.CopyTo(DestinationStream);
+                        article.ImageFilename = newName;
+                    }
+                }
                 _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
