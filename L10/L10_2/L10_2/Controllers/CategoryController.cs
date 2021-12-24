@@ -126,6 +126,13 @@ namespace L10_2.Controllers
 
             var category = await _context.Category
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var article = await _context.Article.FirstOrDefaultAsync(a => a.CategoryId == id);
+            if (article != null)
+            {
+                return View("NotDelete", category);
+            }
+
             if (category == null)
             {
                 return NotFound();
