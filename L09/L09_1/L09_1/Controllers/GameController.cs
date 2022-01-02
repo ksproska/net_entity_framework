@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +10,13 @@ namespace L09_1.Controllers
 {
     public class GameController : Controller
     {
+        private readonly ILogger<GameController> _logger;
+
+        public GameController(ILogger<GameController> logger)
+        {
+            _logger = logger;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -19,12 +28,11 @@ namespace L09_1.Controllers
             {
                 ViewBag.Message = $"Value must be greater than 0.";
                 ViewBag.Cls = "error";
-                var maxAsString = TempData["max"];
             }
             else
             {
+                HttpContext.Session.SetInt32("max", maxVal);
                 ViewBag.Message = $"New max value: {maxVal}";
-                TempData["max"] = maxVal;
             }
 
             return View("Zad2");
@@ -32,18 +40,17 @@ namespace L09_1.Controllers
 
         public IActionResult Draw()
         {
-            var maxAsString = TempData["max"];
-            if (maxAsString == null)
+            int? max = HttpContext.Session.GetInt32("max");
+            if (max == null)
             {
                 ViewBag.Message = "Couldn't draw value. Max value not set.";
                 ViewBag.Cls = "error";
             }
             else
             {
-                int max = (int)maxAsString;
-                int selected = new Random().Next(max);
-                TempData["selected"] = selected;
-                TempData["count"] = 0;
+                int selected = new Random().Next((int)max);
+                HttpContext.Session.SetInt32("selected", selected);
+                HttpContext.Session.SetInt32("count", 0);
                 ViewBag.Message = "Draw successful.";
             }
             return View("Zad2");
@@ -51,28 +58,27 @@ namespace L09_1.Controllers
 
         public IActionResult Guess(int clientGuess)
         {
-            var selectedAsString = TempData["selected"];
-            if (selectedAsString == null)
+            int? selected = HttpContext.Session.GetInt32("selected");
+            if (selected == null)
             {
                 ViewBag.Message = $"Value not selected.";
             }
             else
             {
-                int selected = (int)selectedAsString;
-                int count = (int)TempData["count"];
+                int count = (int)HttpContext.Session.GetInt32("count"); ;
                 count += 1;
                 if (clientGuess < selected)
                 {
-                    TempData["selected"] = selected;
-                    TempData["count"] = count;
+                    HttpContext.Session.SetInt32("selected", (int)selected);
+                    HttpContext.Session.SetInt32("count", count);
                     ViewBag.Message = $"Too little.";
                     ViewBag.Attempt = $"Attempt: {count}";
                     ViewBag.Cls = $"little";
                 }
                 else if (clientGuess > selected)
                 {
-                    TempData["selected"] = selected;
-                    TempData["count"] = count;
+                    HttpContext.Session.SetInt32("selected", (int)selected);
+                    HttpContext.Session.SetInt32("count", count);
                     ViewBag.Message = $"Too much.";
                     ViewBag.Attempt = $"Attempt: {count}";
                     ViewBag.Cls = $"much";
