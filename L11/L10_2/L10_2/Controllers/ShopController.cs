@@ -40,22 +40,56 @@ namespace L10_2.Controllers
             return View("Index", await shopContextFiltered.ToListAsync());
         }
 
-        public async Task<IActionResult> AddToCart(int? id)
+        public async Task<IActionResult> AddCartInShop(int? id)
+        {
+            string sCount = Request.Cookies[id.ToString()];
+            int iCount = 0;
+            if (sCount != null)
+            {
+                iCount = int.Parse(sCount);
+            }
+            iCount += 1;
+
+            Response.Cookies.Append(id.ToString(), iCount.ToString());
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> AddCart(int? id)
+        {
+            string sCount = Request.Cookies[id.ToString()];
+            int iCount = 0;
+            if (sCount != null)
+            {
+                iCount = int.Parse(sCount);
+            }
+            iCount += 1;
+
+            Response.Cookies.Append(id.ToString(), iCount.ToString());
+            return RedirectToAction("ShoppingCart");
+        }
+
+        public async Task<IActionResult> SubCart(int? id)
         {
             string sCount = Request.Cookies[id.ToString()];
             int iCount = 1;
             iCount = int.Parse(sCount);
-            iCount += 1;
+            iCount -= 1;
+            
+            if(iCount > 0)
+            {
+                Response.Cookies.Append(id.ToString(), iCount.ToString());
+            }
+            else
+            {
+                Response.Cookies.Delete(id.ToString());
+            }
+            return RedirectToAction("ShoppingCart");
+        }
 
-            Response.Cookies.Append(id.ToString(), iCount.ToString());
-
-            var allCartIds = Request.Cookies.Select(item => item.Key).ToList();
-            //allCartIds.Add(id.ToString());
-            var allCartArticles = _context.Article
-                .Where<Article>(item => allCartIds.Contains(item.Id.ToString()))
-                .Select(item => new CartArticle(item, Request.Cookies[item.Id.ToString()]));
-
-            return View("ShoppingCart", await allCartArticles.ToListAsync());
+        public async Task<IActionResult> DelCart(int? id)
+        {
+            Response.Cookies.Delete(id.ToString());
+            return RedirectToAction("ShoppingCart");
         }
 
         [Route("Shop/ShoppingCart")]

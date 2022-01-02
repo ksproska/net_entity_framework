@@ -49,15 +49,6 @@ namespace L10_2.ViewModels
         public int Count { get; set; }
 
         public CartArticle() { }
-        public CartArticle(int id, string name, double price, Category category, string imageFilename, int count)
-        {
-            this.Id = id;
-            this.Name = name;
-            this.Price = price;
-            this.Category = category;
-            this.ImageFilename = imageFilename;
-            this.Count = count;
-        }
 
         public CartArticle(Article article, int count)
         {
@@ -65,6 +56,7 @@ namespace L10_2.ViewModels
             this.Name = article.Name;
             this.Price = article.Price;
             this.Category = article.Category;
+            this.CategoryId = article.CategoryId;
             this.ImageFilename = article.ImageFilename;
             this.Count = count;
         }
@@ -75,6 +67,7 @@ namespace L10_2.ViewModels
             this.Name = article.Name;
             this.Price = article.Price;
             this.Category = article.Category;
+            this.CategoryId = article.CategoryId;
             this.ImageFilename = article.ImageFilename;
             this.Count = int.Parse(count);
         }

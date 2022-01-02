@@ -4,11 +4,8 @@
     ViewData["Title"] = "ShoppingCart";
 }
 
-<h1>ShoppingCart</h1>
+<h1>Shopping cart</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -43,15 +40,15 @@
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageFilename)
+                <img src="@Html.DisplayFor(modelItem => item.PhotoRelativePath)" height="80" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Count)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="AddCart" asp-route-id="@item.Id">+</a> |
+                <a asp-action="SubCart" asp-route-id="@item.Id">-</a> |
+                <a asp-action="DelCart" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
