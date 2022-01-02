@@ -9,6 +9,8 @@ using L10_2.Data;
 using L10_2.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace L10_2.Controllers
 {
@@ -16,11 +18,13 @@ namespace L10_2.Controllers
     {
         private readonly ShopDbContext _context;
         private IHostingEnvironment _hostingEnviroment;
+        private readonly ILogger<ArticleController> _logger;
 
-        public ArticleController(ShopDbContext context, IHostingEnvironment hostingEnvironment)
+        public ArticleController(ShopDbContext context, IHostingEnvironment hostingEnvironment, ILogger<ArticleController> logger)
         {
             _context = context;
             _hostingEnviroment = hostingEnvironment;
+            _logger = logger;
         }
 
         // GET: Article
