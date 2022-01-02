@@ -48,6 +48,12 @@ namespace L10_2.ViewModels
         [Required]
         public int Count { get; set; }
 
+        [Required]
+        [DataType(DataType.Currency)]
+        public double Sum { 
+            get { return Count * Price; } 
+        }
+
         public CartArticle() { }
 
         public CartArticle(Article article, int count)
