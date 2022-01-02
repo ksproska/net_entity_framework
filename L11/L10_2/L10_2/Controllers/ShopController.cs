@@ -96,10 +96,15 @@ namespace L10_2.Controllers
         public async Task<IActionResult> ShoppingCart()
         {
             var allCartIds = Request.Cookies.Select(item => item.Key).ToList();
-            var allCartArticles = _context.Article
+
+            var allCartArticles = _context.Article.Include(a => a.Category)
                 .Where<Article>(item => allCartIds.Contains(item.Id.ToString()))
                 .Select(item => new CartArticle(item, Request.Cookies[item.Id.ToString()]));
 
+            if(allCartArticles.ToList().Count == 0)
+            {
+                return View("ShoppingCartEmpty");
+            }
             return View(await allCartArticles.ToListAsync());
         }
     }
