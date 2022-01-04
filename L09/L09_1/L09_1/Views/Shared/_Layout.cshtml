@@ -24,27 +24,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Draw">Draw</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Guess" asp-route-clientGuess="1">Guess,1</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Guess" asp-route-clientGuess="5">Guess,5</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Guess" asp-route-clientGuess="10">Guess,10</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Guess" asp-route-clientGuess="15">Guess,15</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Guess" asp-route-clientGuess="20">Guess,20</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Guess" asp-route-clientGuess="25">Guess,25</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Guess" asp-route-clientGuess="29">Guess,29</a>    
-                        </li>
+                        @for (int index = 0; index < 30; index++)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Guess" asp-route-clientGuess="@index">@index</a>
+                            </li>
+
+                        }
                     </ul>
                 </div>
             </div>

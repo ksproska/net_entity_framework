@@ -88,6 +88,7 @@ namespace L09_1.Controllers
                     ViewBag.Message = $"Bingo! Value is {selected}";
                     ViewBag.Attempt = $"Attempt: {count}";
                     ViewBag.Cls = $"bingo";
+                    HttpContext.Session.Clear();
                 }
             }
 
