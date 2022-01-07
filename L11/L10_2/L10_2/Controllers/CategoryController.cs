@@ -131,7 +131,7 @@ namespace L10_2.Controllers
             if (article != null)
             {
                 return View("NotDelete", category);
-            }
+            } 
 
             if (category == null)
             {

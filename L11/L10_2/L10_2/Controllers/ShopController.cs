@@ -49,7 +49,7 @@ namespace L10_2.Controllers
                 iCount = int.Parse(sCount);
             }
             iCount += 1;
-
+            //ViewData["ExtraMessage"] = "Product added to cart";
             Response.Cookies.Append(id.ToString(), iCount.ToString());
             return RedirectToAction("Index");
         }
