@@ -1,0 +1,87 @@
+﻿@page
+@model L12.Pages.Shop.IndexModel
+
+@{
+    ViewData["Title"] = "Shop";
+}
+
+<h1>Shop</h1>
+
+@*<p>
+    <a asp-page="Create">Create New</a>
+</p>*@
+<p>
+    <select id="selectList" @*asp-items="Model.CategoryIds"*@
+            onchange="setSelected(event)">
+        <option value="-1">Please select</option>
+        <option value="-1">all</option>
+        @foreach (var category in Model.Categories)
+        {
+            if(category.Id == Model.CategoryId)
+            {
+                <option selected value="@category.Id">@category.Name</option>
+            }
+            else
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+            
+        }
+    </select>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Article[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Article[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Article[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Article[0].ImageFilename)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Article) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageFilename)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<script>
+    var setSelected = function (event) {
+        var li = document.getElementById('selectList');
+        var selectedValue = li.options[li.selectedIndex].value;
+        var url = window.location.href;
+        var elems = url.split("/");
+        var newUrl = elems[0] + "/" + elems[1] + "/" + elems[2] + "/shop";
+        if (selectedValue != -1) {
+            newUrl += "/?CategoryId=" + selectedValue;
+        }
+        window.location.href = newUrl;
+    };
+</script>
