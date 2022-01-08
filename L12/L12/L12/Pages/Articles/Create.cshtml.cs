@@ -6,17 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using L12.Data;
+using System.IO;
 using L12.Models;
+using Microsoft.AspNetCore.Hosting;
 
 namespace L12.Pages.Articles
 {
     public class CreateModel : PageModel
     {
         private readonly L12.Data.ShopDbContext _context;
+        private IHostingEnvironment _hostingEnviroment;
 
-        public CreateModel(L12.Data.ShopDbContext context)
+        public CreateModel(L12.Data.ShopDbContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnviroment = hostingEnvironment;
         }
 
         public IActionResult OnGet()
@@ -34,6 +38,19 @@ namespace L12.Pages.Articles
             if (!ModelState.IsValid)
             {
                 return Page();
+            }
+
+            var formfile = Article.FormFile;
+            if (formfile != null)
+            {
+                var filename = formfile.FileName;
+                var newName = Guid.NewGuid().ToString() + filename;
+                string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, "upload");
+                using (FileStream DestinationStream = System.IO.File.Create(Path.Combine(uploadFolder, newName)))
+                {
+                    formfile.CopyTo(DestinationStream);
+                    Article.ImageFilename = newName;
+                }
             }
 
             _context.Article.Add(Article);

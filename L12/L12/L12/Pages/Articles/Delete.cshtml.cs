@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using L12.Data;
 using L12.Models;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace L12.Pages.Articles
 {
     public class DeleteModel : PageModel
     {
         private readonly L12.Data.ShopDbContext _context;
+        private IHostingEnvironment _hostingEnviroment;
 
-        public DeleteModel(L12.Data.ShopDbContext context)
+        public DeleteModel(L12.Data.ShopDbContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnviroment = hostingEnvironment;
         }
 
         [BindProperty]
@@ -50,6 +54,15 @@ namespace L12.Pages.Articles
 
             if (Article != null)
             {
+                if (Article.ImageFilename != "")
+                {
+                    string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, "upload");
+                    string path = Path.GetFullPath(Path.Combine(uploadFolder, Article.ImageFilename));
+                    if (System.IO.File.Exists(path))
+                    {
+                        System.IO.File.Delete(path);
+                    }
+                }
                 _context.Article.Remove(Article);
                 await _context.SaveChangesAsync();
             }

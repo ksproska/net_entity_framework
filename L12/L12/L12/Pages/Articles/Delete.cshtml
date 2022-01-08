@@ -34,7 +34,8 @@
             @Html.DisplayNameFor(model => model.Article.ImageFilename)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Article.ImageFilename)
+            @*@Html.DisplayFor(model => model.Article.ImageFilename)*@
+            <img src="@Html.DisplayFor(model => model.Article.PhotoRelativePath)" />
         </dd>
     </dl>
     
