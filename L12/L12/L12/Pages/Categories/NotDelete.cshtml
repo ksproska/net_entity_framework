@@ -1,11 +1,11 @@
 ﻿@page
-@model L12.Pages.Categories.DetailsModel
+@model L12.Pages.Categories.NotDeleteModel
 
 @{
-    ViewData["Title"] = "Details category";
+    ViewData["Title"] = "Cannot delete category";
 }
 
-<h1>Category</h1>
+<h1>Cannot delete category</h1>
 
 <div>
     <hr />
@@ -19,6 +19,9 @@
     </dl>
 </div>
 <div>
+    <h5>This category is in use - you cannot delete it.</h5>
+</div>
+<div> 
     <a asp-page="./Edit" asp-route-id="@Model.Category.Id">Edit</a> |
     <a asp-page="./Index">Back to List</a>
 </div>

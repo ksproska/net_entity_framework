@@ -10,16 +10,15 @@ using L12.Models;
 
 namespace L12.Pages.Categories
 {
-    public class DeleteModel : PageModel
+    public class NotDeleteModel : PageModel
     {
         private readonly L12.Data.ShopDbContext _context;
 
-        public DeleteModel(L12.Data.ShopDbContext context)
+        public NotDeleteModel(L12.Data.ShopDbContext context)
         {
             _context = context;
         }
 
-        [BindProperty]
         public Category Category { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -35,31 +34,7 @@ namespace L12.Pages.Categories
             {
                 return NotFound();
             }
-            var article = await _context.Article.FirstOrDefaultAsync(a => a.CategoryId == id);
-            if (article != null)
-            {
-                return RedirectToPage("./NotDelete", Category);
-            }
-
             return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Category = await _context.Category.FindAsync(id);
-
-            if (Category != null)
-            {
-                _context.Category.Remove(Category);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToPage("./Index");
         }
     }
 }
