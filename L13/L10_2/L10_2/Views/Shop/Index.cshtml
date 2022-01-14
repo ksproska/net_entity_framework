@@ -1,0 +1,77 @@
+﻿@model IEnumerable<L10_2.ViewModels.Article>
+
+@{
+    ViewData["Title"] = "Shop";
+}
+
+<h1>Shop</h1>
+@*<p>@ViewData["ExtraMessage"]</p>*@
+<p>
+    <select id="selectList" asp-items="ViewBag.CategoryList" 
+            onchange="setSelected(event)">
+        <option value="-1">Please select</option>
+        <option value="-1">all</option>
+    </select>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFilename)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.ImageFilename)*@
+                    <img src="@Html.DisplayFor(modelItem => item.PhotoRelativePath)" height="80" />
+                </td>
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |*@
+                    <a asp-action="AddCartInShop" asp-route-id="@item.Id">Add to shopingcart</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    var setSelected = function (event) {
+        var li = document.getElementById('selectList');
+        var selectedValue = li.options[li.selectedIndex].value;
+        var url = window.location.href;
+        var elems = url.split("/");
+        var newUrl = elems[0] + "/" + elems[1] + "/" + elems[2] + "/Shop";
+        if (selectedValue != -1) {
+            newUrl += "/" + selectedValue;
+        }
+        window.location.href = newUrl;
+    };
+</script>
