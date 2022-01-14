@@ -1,4 +1,4 @@
-﻿@page
+﻿ @page
 @model L12.Pages.Shop.IndexModel
 
 @{
@@ -64,9 +64,9 @@
                 <img src="@Html.DisplayFor(modelItem => item.PhotoRelativePath)" height="80" />
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-area="" asp-page="/Articles/Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-area="" asp-page="/Articles/Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-area="" asp-page="/Articles/Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

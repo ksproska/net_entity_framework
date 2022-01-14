@@ -52,8 +52,9 @@ namespace L12.Pages.Categories
             }
 
             Category = await _context.Category.FindAsync(id);
+            var article = await _context.Article.FirstOrDefaultAsync(a => a.CategoryId == id);
 
-            if (Category != null)
+            if (Category != null && article == null)
             {
                 _context.Category.Remove(Category);
                 await _context.SaveChangesAsync();

@@ -54,7 +54,7 @@ namespace L12.Pages.Articles
 
             if (Article != null)
             {
-                if (Article.ImageFilename != "")
+                if (Article.ImageFilename != null && Article.ImageFilename != "")
                 {
                     string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, "upload");
                     string path = Path.GetFullPath(Path.Combine(uploadFolder, Article.ImageFilename));

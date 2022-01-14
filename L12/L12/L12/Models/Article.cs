@@ -37,6 +37,7 @@ namespace L12.Models
         public IFormFile FormFile { get; set; }
 
         [Display(Name = "Image")]
+        [MaxLength(100, ErrorMessage = " To long article name, do not exceed {1}")]
         public string ImageFilename { get; set; }
 
         [NotMapped]
