@@ -39,7 +39,7 @@ namespace L10_2.Controllers
             var shopContextFiltered = _context.Article
                 .Where<Article>(item => item.CategoryId == CategoryId)
                 .Include(a => a.Category);
-            ViewData["CategoryList"] = new SelectList(_context.Category, "Id", "Name");
+            ViewData["CategoryList"] = new SelectList(_context.Category, "Id", "Name", CategoryId);
             //ViewData["SelectedId"] = CategoryId;
             return View("Index", await shopContextFiltered.ToListAsync());
         }

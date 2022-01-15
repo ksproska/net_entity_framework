@@ -7,10 +7,9 @@
 <h1>Shop</h1>
 @*<p>@ViewData["ExtraMessage"]</p>*@
 <p>
-    <select id="selectList" asp-items="ViewBag.CategoryList" 
+    <select class="form-control" id="selectList" asp-items="ViewBag.CategoryList" 
             onchange="setSelected(event)">
-        <option value="-1">Please select</option>
-        <option value="-1">all</option>
+        <option value="-1">All categories</option>
     </select>
 </p>
 <table class="table">
