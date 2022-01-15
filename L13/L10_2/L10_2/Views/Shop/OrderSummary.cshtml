@@ -1,12 +1,11 @@
 ﻿@model IEnumerable<L10_2.ViewModels.CartArticle>
 
 @{
-    ViewData["Title"] = "Shopping cart";
+    ViewData["Title"] = "Summary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Shopping cart</h1>
-
-<a asp-action="OrderSummary">Place order</a>
+<h1>Summary</h1>
 
 <table class="table">
     <thead>
@@ -29,7 +28,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Sum)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -54,11 +52,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Sum)
                 </td>
-                <td>
-                    <a asp-action="AddCart" asp-route-id="@item.Id">+</a> |
-                    <a asp-action="SubCart" asp-route-id="@item.Id">-</a> |
-                    <a asp-action="DelCart" asp-route-id="@item.Id">Delete</a>
-                </td>
             </tr>
         }
         <tr>
@@ -73,10 +66,9 @@
                 {
                     allSum += item.Sum;
                 }
-            <th>@Html.FormatValue(allSum, "{0:N2} zł")</th>
+                <th>@Html.FormatValue(allSum, "{0:N2} zł")</th>
             }
 
-            <th></th>
         </tr>
     </tbody>
 </table>

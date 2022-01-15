@@ -26,14 +26,14 @@ namespace L10_2.Data
                 };
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
-            if (!roleManager.RoleExistsAsync("Client").Result)
-            {
-                IdentityRole role = new IdentityRole
-                {
-                    Name = "Client",
-                };
-                IdentityResult roleResult = roleManager.CreateAsync(role).Result;
-            }
+            //if (!roleManager.RoleExistsAsync("Client").Result)
+            //{
+            //    IdentityRole role = new IdentityRole
+            //    {
+            //        Name = "Client",
+            //    };
+            //    IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+            //}
         }
 
         public static void SeedOneUser(UserManager<IdentityUser> userManager,
