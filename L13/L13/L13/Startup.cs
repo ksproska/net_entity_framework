@@ -1,4 +1,4 @@
-using L10_2.Data;
+using L13.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace L10_2
+namespace L13
 {
     public class Startup
     {
@@ -37,8 +37,7 @@ namespace L10_2
             services.AddControllersWithViews();
             services.AddDbContextPool<ShopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("ShopDb1")));
-            // todo check if necessery:
-            // services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +59,6 @@ namespace L10_2
             app.UseRouting();
 
             app.UseAuthorization();
-
             app.UseSession();
 
             app.UseEndpoints(endpoints =>

@@ -2,6 +2,7 @@ using L10_2.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,14 +37,21 @@ namespace L10_2
 
             services.AddControllersWithViews();
             services.AddDbContextPool<ShopDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("ShopDb")));
+            options.UseSqlServer(Configuration.GetConnectionString("ShopLoginDb")));
             // todo check if necessery:
             // services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
+
+            // w ramach testow, brak potwierdzenia email
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>() // w ramach autentykacji
+                .AddEntityFrameworkStores<ShopDbContext>(); // gdzie przechowywac
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env
+            //, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager
+            )
+        { // UserManager i RoleManager wstrzykniete
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -59,7 +67,8 @@ namespace L10_2
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication(); // uzytkownik - haslo
+            app.UseAuthorization(); // role
 
             app.UseSession();
 
@@ -68,6 +77,7 @@ namespace L10_2
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages(); // new
             });
         }
     }
