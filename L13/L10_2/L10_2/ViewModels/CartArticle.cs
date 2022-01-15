@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace L10_2.ViewModels
 {
+    [NotMapped]
     public class CartArticle
     {
         [NotMapped]

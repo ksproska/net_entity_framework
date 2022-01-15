@@ -1,4 +1,5 @@
-﻿@model IEnumerable<L10_2.ViewModels.CartArticle>
+﻿@using L10_2.ViewModels
+@model L10_2.ViewModels.OrderDetails
 
 @{
     ViewData["Title"] = "Summary";
@@ -11,27 +12,27 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(m => m.CartArticles[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(m => m.CartArticles[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(m => m.CartArticles[0].Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ImageFilename)
+                @Html.DisplayNameFor(m => m.CartArticles[0].ImageFilename)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Count)
+                @Html.DisplayNameFor(m => m.CartArticles[0].Count)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Sum)
+                @Html.DisplayNameFor(m => m.CartArticles[0].Sum)
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.CartArticles)
         {
             <tr>
                 <td>
@@ -62,7 +63,7 @@
             <th></th>
             @{
                 double allSum = 0;
-                foreach (var item in Model)
+                foreach (var item in Model.CartArticles)
                 {
                     allSum += item.Sum;
                 }
@@ -72,3 +73,66 @@
         </tr>
     </tbody>
 </table>
+
+<form asp-action="Order">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <section>
+                <h4>Personal data</h4>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Surname" class="control-label"></label>
+                    <input asp-for="Surname" class="form-control" />
+                    <span asp-validation-for="Surname" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-4 col-md-offset-2">
+            <section>
+                <h4>Delivery data</h4>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Postcode" class="control-label"></label>
+                    <input asp-for="Postcode" class="form-control" />
+                    <span asp-validation-for="Postcode" class="text-danger"></span>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-4 col-md-offset-4">
+            <section>
+                <h4>Payment</h4>
+                <label class="control-label"></label>
+                <label asp-for="PaymentOption" class="control-label"></label>
+                <select asp-for="PaymentOption" class="form-control" asp-items="ViewBag.DeliveryOptionId"></select>
+                <span asp-validation-for="PaymentOption" class="text-danger"></span>
+                @*<select class="custom-select">
+                <option selected value="0">Please select</option>
+                <option value="1">opt 1</option>
+                <option value="2">opt 2</option>
+                <option value="3">opt 3</option>
+                </select>*@
+            </section>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Order" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

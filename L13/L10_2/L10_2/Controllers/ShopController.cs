@@ -112,6 +112,23 @@ namespace L10_2.Controllers
             return View(await allCartArticles.ToListAsync());
         }
 
+        //[Authorize]
+        //[Route("Shop/OrderSummary")]
+        //public async Task<IActionResult> OrderSummary()
+        //{
+        //    var allCartIds = Request.Cookies.Select(item => item.Key).ToList();
+
+        //    var allCartArticles = _context.Article.Include(a => a.Category)
+        //        .Where<Article>(item => allCartIds.Contains(item.Id.ToString()))
+        //        .Select(item => new CartArticle(item, Request.Cookies[item.Id.ToString()]));
+
+        //    if (allCartArticles.ToList().Count == 0)
+        //    {
+        //        return View("ShoppingCartEmpty");
+        //    }
+        //    return View(await allCartArticles.ToListAsync());
+        //}
+
         [Authorize]
         [Route("Shop/OrderSummary")]
         public async Task<IActionResult> OrderSummary()
@@ -126,7 +143,13 @@ namespace L10_2.Controllers
             {
                 return View("ShoppingCartEmpty");
             }
-            return View(await allCartArticles.ToListAsync());
+            var orderDetails = new OrderDetails(){
+                CartArticles = allCartArticles.ToList()
+            };
+
+            ViewData["DeliveryOptionId"] = new SelectList(_context.PaymentOption, "Id", "Name");
+
+            return View(orderDetails);
         }
     }
 }
