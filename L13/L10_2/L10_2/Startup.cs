@@ -48,8 +48,8 @@ namespace L10_2
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env
-            //, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, 
+            UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager
             )
         { // UserManager i RoleManager wstrzykniete
             if (env.IsDevelopment())
@@ -69,6 +69,7 @@ namespace L10_2
 
             app.UseAuthentication(); // uzytkownik - haslo
             app.UseAuthorization(); // role
+            MyIdentityDataInitializer.SeedData(userManager, roleManager); // init for roles
 
             app.UseSession();
 

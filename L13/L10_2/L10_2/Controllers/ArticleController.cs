@@ -11,9 +11,11 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace L10_2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ArticleController : Controller
     {
         private readonly ShopDbContext _context;

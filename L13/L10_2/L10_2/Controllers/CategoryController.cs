@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using L10_2.Data;
 using L10_2.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace L10_2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private readonly ShopDbContext _context;

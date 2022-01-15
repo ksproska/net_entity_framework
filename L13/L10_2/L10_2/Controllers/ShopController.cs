@@ -8,9 +8,13 @@ using System.Threading.Tasks;
 using L10_2.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace L10_2.Controllers
 {
+    //[Authorize(Policy = "ExceptAdmin")]
+    //[AllowAnonymous]
+    //[Authorize(Roles = "Client, ")]
     public class ShopController : Controller
     {
         ShopDbContext _context;
