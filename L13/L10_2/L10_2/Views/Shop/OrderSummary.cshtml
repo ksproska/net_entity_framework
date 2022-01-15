@@ -74,7 +74,7 @@
     </tbody>
 </table>
 
-<form asp-action="Order">
+<form asp-action="OrderFinished">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-4">
@@ -116,15 +116,8 @@
             <section>
                 <h4>Payment</h4>
                 <label class="control-label"></label>
-                <label asp-for="PaymentOption" class="control-label"></label>
-                <select asp-for="PaymentOption" class="form-control" asp-items="ViewBag.DeliveryOptionId"></select>
-                <span asp-validation-for="PaymentOption" class="text-danger"></span>
-                @*<select class="custom-select">
-                <option selected value="0">Please select</option>
-                <option value="1">opt 1</option>
-                <option value="2">opt 2</option>
-                <option value="3">opt 3</option>
-                </select>*@
+                <label asp-for="PaymentOptionId" class="control-label"></label>
+                <select asp-for="PaymentOptionId" class="form-control" asp-items="ViewBag.PaymentOptionId"></select>
             </section>
         </div>
     </div>

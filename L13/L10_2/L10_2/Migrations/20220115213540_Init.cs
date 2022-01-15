@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace L10_2.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,6 +57,37 @@ namespace L10_2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Postcode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentOptionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentOption",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentOption", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,28 +218,20 @@ namespace L10_2.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "CartArticle",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    ImageFilename = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Count = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CartArticle", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CartArticle_Category_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Category",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.InsertData(
+                table: "PaymentOption",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "bank transfer" });
+
+            migrationBuilder.InsertData(
+                table: "PaymentOption",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 2, "blick" });
+
+            migrationBuilder.InsertData(
+                table: "PaymentOption",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 3, "cash" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Article_CategoryId",
@@ -253,11 +276,6 @@ namespace L10_2.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CartArticle_CategoryId",
-                table: "CartArticle",
-                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -281,16 +299,19 @@ namespace L10_2.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CartArticle");
+                name: "OrderDetails");
+
+            migrationBuilder.DropTable(
+                name: "PaymentOption");
+
+            migrationBuilder.DropTable(
+                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Category");
         }
     }
 }

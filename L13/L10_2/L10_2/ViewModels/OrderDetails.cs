@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace L10_2.ViewModels
 {
-    [NotMapped]
+    //[NotMapped]
     public class OrderDetails
     {
         [Required]
+        public int Id{ get; set; }
+        [NotMapped]
         public List<CartArticle> CartArticles { get; set; }
         [Required]
         [MinLength(1, ErrorMessage = "To short name")]
@@ -35,9 +37,12 @@ namespace L10_2.ViewModels
         [RegularExpression(@"^[0-9]{2}-[0-9]{3}$", ErrorMessage = "Example: 00-000")]
         public string Postcode { get; set; }
         
+        [NotMapped]
         [Display(Name = "Type")]
         public PaymentOption PaymentOption { get; set; }
         [Required]
         public int PaymentOptionId { get; set; }
+
+        public OrderDetails() { }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace L10_2.Migrations
 {
     [DbContext(typeof(ShopDbContext))]
-    [Migration("20220115092056_newInit")]
-    partial class newInit
+    [Migration("20220115213540_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,37 +49,6 @@ namespace L10_2.Migrations
                     b.ToTable("Article");
                 });
 
-            modelBuilder.Entity("L10_2.ViewModels.CartArticle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageFilename")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("CartArticle");
-                });
-
             modelBuilder.Entity("L10_2.ViewModels.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -95,6 +64,78 @@ namespace L10_2.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("L10_2.ViewModels.OrderDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("PaymentOptionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Postcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderDetails");
+                });
+
+            modelBuilder.Entity("L10_2.ViewModels.PaymentOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentOption");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "bank transfer"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "blick"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "cash"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -298,17 +339,6 @@ namespace L10_2.Migrations
                 });
 
             modelBuilder.Entity("L10_2.ViewModels.Article", b =>
-                {
-                    b.HasOne("L10_2.ViewModels.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("L10_2.ViewModels.CartArticle", b =>
                 {
                     b.HasOne("L10_2.ViewModels.Category", "Category")
                         .WithMany()
