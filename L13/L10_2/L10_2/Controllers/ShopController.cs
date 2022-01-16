@@ -126,8 +126,9 @@ namespace L10_2.Controllers
             {
                 return View("ShoppingCartEmpty");
             }
-            var orderDetails = new OrderDetails(){
-                CartArticles = allCartArticles.ToList()
+            var orderDetails = new OrderDetails() {
+                CartArticles = allCartArticles.ToList(),
+                //ArticleIdWithRepetition = new List<int>()
             };
 
             ViewData["PaymentOptionId"] = new SelectList(_context.PaymentOption, "Id", "Name");
@@ -142,6 +143,17 @@ namespace L10_2.Controllers
         {
             orderDetails.PaymentOption = await _context.PaymentOption
                 .FirstOrDefaultAsync(m => m.Id == orderDetails.PaymentOptionId);
+
+            var allCartIds = Request.Cookies.Select(item => item.Key).ToList();
+            var allCartArticles = _context.Article.Include(a => a.Category)
+                .Where<Article>(item => allCartIds.Contains(item.Id.ToString()))
+                .Select(item => new CartArticle(item, Request.Cookies[item.Id.ToString()]));
+
+            foreach (var x in allCartArticles)
+            {
+                Response.Cookies.Delete(x.Id.ToString());
+            }
+
             return View(orderDetails);
         }
     }

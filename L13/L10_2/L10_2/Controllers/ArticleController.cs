@@ -172,7 +172,7 @@ namespace L10_2.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var article = await _context.Article.FindAsync(id);
-            if (article.ImageFilename != "")
+            if (article.ImageFilename != "" && article.ImageFilename != null)
             {
                 string uploadFolder = Path.Combine(_hostingEnviroment.WebRootPath, "upload");
                 string path = Path.GetFullPath(Path.Combine(uploadFolder, article.ImageFilename));
@@ -183,6 +183,7 @@ namespace L10_2.Controllers
             }
 
             _context.Article.Remove(article);
+            Response.Cookies.Delete(article.Id.ToString());
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -74,6 +74,10 @@
     </tbody>
 </table>
 
+<br />
+<br />
+<br />
+
 <form asp-action="OrderFinished">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
@@ -120,11 +124,19 @@
                 <select asp-for="PaymentOptionId" class="form-control" asp-items="ViewBag.PaymentOptionId"></select>
             </section>
         </div>
+        @*<div hidden class="form-group">
+            <label asp-for="ArticleIdWithRepetition" class="control-label"></label>
+            <input asp-for="ArticleIdWithRepetition" class="form-control" />
+        </div>*@
     </div>
     <div class="form-group">
         <input type="submit" value="Order" class="btn btn-primary" />
     </div>
 </form>
+
+<br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

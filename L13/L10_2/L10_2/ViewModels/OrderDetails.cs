@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 
 namespace L10_2.ViewModels
 {
-    //[NotMapped]
+    [NotMapped]
     public class OrderDetails
     {
         [Required]
         public int Id{ get; set; }
         [NotMapped]
         public List<CartArticle> CartArticles { get; set; }
+        //[Required]
+        //[NotMapped]
+        //public List<int> ArticleIdWithRepetition { get; set; }
         [Required]
         [MinLength(1, ErrorMessage = "To short name")]
         [MaxLength(20, ErrorMessage = " To long name, do not exceed {1}")]
