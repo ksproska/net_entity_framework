@@ -12,9 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace L10_2.Controllers
 {
-    //[Authorize(Policy = "ExceptAdmin")]
-    //[AllowAnonymous]
-    //[Authorize(Roles = "Client, ")]
+    [Authorize(Policy = "ExcludeRoles")]
     public class ShopController : Controller
     {
         ShopDbContext _context;

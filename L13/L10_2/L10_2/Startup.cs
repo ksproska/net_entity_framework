@@ -45,6 +45,11 @@ namespace L10_2
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>() // w ramach autentykacji
                 .AddEntityFrameworkStores<ShopDbContext>(); // gdzie przechowywac
+
+            services.AddRazorPages();
+            services.AddAuthorization(options => {
+                options.AddPolicy("ExcludeRoles", policy => policy.AddRequirements(new CustomRoleRequirement()));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
