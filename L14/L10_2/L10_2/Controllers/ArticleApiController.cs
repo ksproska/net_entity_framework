@@ -1,58 +1,58 @@
 ﻿using L10_2.Data;
 using L10_2.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace L10_2.Controllers
 {
     [EnableCors]
-    [Route("api/category")]
+    [Route("api/article")]
     [ApiController]
     //[Authorize(Roles = "Admin")]
-    public class CategoryApiController : ControllerBase
+    public class ArticleApiController : ControllerBase
     {
         private readonly ShopDbContext _context;
-        public CategoryApiController(ShopDbContext context)
+        public ArticleApiController(ShopDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public IEnumerable<Category> Get() => _context.Category;
+        public IEnumerable<Article> Get() => _context.Article;
         [HttpGet("{id}")]
-        public Category Get(int id) => _context.Category.ToList().Where(item => item.Id == id).FirstOrDefault();
+        public Article Get(int id) => _context.Article.ToList().Where(item => item.Id == id).FirstOrDefault();
         [HttpPost]
-        public Category Post([FromBody] Category category)
+        public Article Post([FromBody] Article article)
         {
-            _context.Category.Add(category);
+            _context.Article.Add(article);
             _context.SaveChanges();
-            return category;
+            return article;
         }
 
         [HttpPut]
-        public Category Put([FromBody] Category category)
+        public Article Put([FromBody] Article article)
         {
-            _context.Category.Update(category);
+            _context.Article.Update(article);
             _context.SaveChanges();
-            return category;
+            return article;
         }
 
         //[HttpPatch("{id}")]
         //public StatusCodeResult Patch(int id,
-        //        [FromBody] JsonPatchDocument<Category> patch)
+        //        [FromBody] JsonPatchDocument<Article> patch)
         //{
         //    //not working
-        //    Category category = Get(id);
-        //    if (category != null)
+        //    Article article = Get(id);
+        //    if (article != null)
         //    {
-        //        patch.ApplyTo(category);
-        //        _context.Category.Update(category);
+        //        patch.ApplyTo(article);
+        //        _context.Article.Update(article);
         //        _context.SaveChanges();
         //        return Ok();
         //    }
@@ -62,11 +62,10 @@ namespace L10_2.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var article = _context.Article.FirstOrDefault(a => a.CategoryId == id);
-            var category = _context.Category.FirstOrDefault(m => m.Id == id);
-            if (article == null && category != null)
+            var article = _context.Article.FirstOrDefault(a => a.Id == id);
+            if (article != null)
             {
-                _context.Category.Remove(category);
+                _context.Article.Remove(article);
                 _context.SaveChanges();
             }
         }
