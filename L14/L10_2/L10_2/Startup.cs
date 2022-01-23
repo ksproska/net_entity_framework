@@ -1,4 +1,5 @@
 using L10_2.Data;
+using L10_2.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,7 +36,9 @@ namespace L10_2
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddControllersWithViews();
+            //services.AddSingleton<IRepositoryCategory, MemoryRepositoryCategory>();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(); //PATCH
             services.AddDbContextPool<ShopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("ShopLoginDb")));
             // todo check if necessery:
@@ -77,7 +80,7 @@ namespace L10_2
             MyIdentityDataInitializer.SeedData(userManager, roleManager); // init for roles
 
             app.UseSession();
-
+            app.UseCors(); // dodane, inaczej error z baza
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
