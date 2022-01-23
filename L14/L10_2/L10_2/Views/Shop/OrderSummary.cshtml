@@ -1,0 +1,143 @@
+﻿@using L10_2.ViewModels
+@model L10_2.ViewModels.OrderDetails
+
+@{
+    ViewData["Title"] = "Summary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Summary</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.CartArticles[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.CartArticles[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.CartArticles[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.CartArticles[0].ImageFilename)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.CartArticles[0].Count)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.CartArticles[0].Sum)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CartArticles)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    <img src="@Html.DisplayFor(modelItem => item.PhotoRelativePath)" height="80" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Count)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sum)
+                </td>
+            </tr>
+        }
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            @{
+                double allSum = 0;
+                foreach (var item in Model.CartArticles)
+                {
+                    allSum += item.Sum;
+                }
+                <th>@Html.FormatValue(allSum, "{0:N2} zł")</th>
+            }
+
+        </tr>
+    </tbody>
+</table>
+
+<br />
+<br />
+<br />
+
+<form asp-action="OrderFinished">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <section>
+                <h4>Personal data</h4>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Surname" class="control-label"></label>
+                    <input asp-for="Surname" class="form-control" />
+                    <span asp-validation-for="Surname" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-4 col-md-offset-2">
+            <section>
+                <h4>Delivery data</h4>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Postcode" class="control-label"></label>
+                    <input asp-for="Postcode" class="form-control" />
+                    <span asp-validation-for="Postcode" class="text-danger"></span>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-4 col-md-offset-4">
+            <section>
+                <h4>Payment</h4>
+                <label class="control-label"></label>
+                <label asp-for="PaymentOptionId" class="control-label"></label>
+                <select asp-for="PaymentOptionId" class="form-control" asp-items="ViewBag.PaymentOptionId"></select>
+            </section>
+        </div>
+        @*<div hidden class="form-group">
+            <label asp-for="ArticleIdWithRepetition" class="control-label"></label>
+            <input asp-for="ArticleIdWithRepetition" class="form-control" />
+        </div>*@
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Order" class="btn btn-primary" />
+    </div>
+</form>
+
+<br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
