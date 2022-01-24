@@ -28,27 +28,66 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @*@Html.DisplayFor(modelItem => item.PhotoRelativePath)*@
-                <img src="@Html.DisplayFor(modelItem => item.PhotoRelativePath)" height="80" />
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr id="row-@item.Id" style="display: none;">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.PhotoRelativePath)*@
+                    <img src="@Html.DisplayFor(modelItem => item.PhotoRelativePath)" height="80" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<p id="loaded" hidden>0</p>
+<div>
+    <button class="form-control" onclick="jsAjax()"> Load more </button>
+</div>
+
+<script>
+    function jsAjax() {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (this.status === 200) {
+                try {
+                    const inx = JSON.parse(this.responseText);
+                    //console.log(stud);
+                    let id = document.getElementById("loaded").innerHTML.trim();
+                    document.getElementById("row-" + inx).style.display = '';
+                    document.getElementById("loaded").innerHTML = parseInt(id) + 1;
+                } catch (e) {
+                    console.warn('There was an error in JSON. Could not parse.');
+                }
+            } else if (this.status === 204) { // 204 No Content, so NULL
+                window.alert("No " + " element");
+            } else {
+                console.warn("Recived " + this.status + " in response code.");
+            }
+        };
+        let id = document.getElementById("loaded");
+        let str = "/api/article/loadmore/" + id.innerHTML.trim();
+        xhr.open("get", str)
+        xhr.send();
+    }
+
+    window.onscroll = function (ev) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            jsAjax();
+        }
+    };
+</script>

@@ -70,10 +70,34 @@ namespace L10_2.Controllers
             }
         }
 
+        [HttpGet("loadMore/{len}")]
+        public int LoadMore(int len)
+        {
+            len += 1;
+            var loaded = _context.Article.OrderBy(item => item.Id).Take(len);
+            //foreach(var article in loaded)
+            //{
+            //    article.Category = _context.Category.Where(item => item.Id == article.CategoryId).First();
+            //}
+
+            return loaded.Last().Id;
+            //if(len >= loaded.ToList().Count)
+            //{
+            //    return loaded.Last();
+            //}
+            //return loaded.Take(len).Last();
+        }
+
         //[HttpGet("prev/{id}")]
-        //public Student GetPrev(int id) => repository.GetPreviousStudent(id);
+        //public Article GetPrev(int id) => _context.Article
+        //    .Where(item => item.Id < id)
+        //    .OrderByDescending(s => s.Id)
+        //    .FirstOrDefault();
 
         //[HttpGet("next/{id}")]
-        //public Student GetNext(int id) => repository.GetNextStudent(id);
+        //public Article GetNext(int id) => _context.Article
+        //    .Where(item => item.Id < id)
+        //    .OrderBy(s => s.Id)
+        //    .FirstOrDefault();
     }
 }
