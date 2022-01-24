@@ -30,7 +30,12 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr id="row-@item.Id" style="display: none;">
+            var trStyle = "";
+            @if(item.Id > ViewBag.maxInx)
+            {
+                trStyle = "none";
+            }
+            <tr id="row-@item.Id" style="display: @trStyle;">
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
