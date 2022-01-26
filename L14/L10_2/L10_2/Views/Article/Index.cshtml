@@ -2,8 +2,6 @@
 
 @{
     ViewData["Title"] = "Article";
-    TempData["current"] = ViewBag.maxInx;
-    var currentValue = ViewBag.maxInx;
 }
 
 <h1>Article</h1>
@@ -32,13 +30,14 @@
     <tbody id="rows-body">
         @foreach (var item in Model)
         {
-        <tr id="row-@item.Id"></tr>
+        <tr>
+            @Html.Partial("_ArticleRow", item)
+        </tr>
         }
     </tbody>
 </table>
 
-<p id="loaded" hidden>0</p>
-<p id="currentId" hidden>0</p>
+<p id="loaded" hidden>@ViewBag.loadedNr</p>
 <div>
     <button id="more-btn" class="form-control" onclick="jsAjax()"> Load more </button>
 </div>
@@ -50,21 +49,17 @@
             if (this.status === 200) {
                 try {
                     const article = JSON.parse(this.responseText);
-                    let id = document.getElementById("loaded").innerHTML.trim();
-                    @*document.getElementById("row-" + article.id).style.display = '';*@
-
+                    let inx = document.getElementById("loaded").innerHTML.trim();
+                    
                     $.get('@Url.Action("_ArticleRow", "Article")' + '/' + article.id, {},
                         function (response) {
-                            @*$("#row-" + article.id).html(response);*@
-                            @*document.querySelector('#rows-body').insertAdjacentHTML('afterend', response);*@
                             document.querySelector('#rows-body').innerHTML += response;
                         });
-                    document.getElementById("loaded").innerHTML = parseInt(id) + 1;
+                    document.getElementById("loaded").innerHTML = parseInt(inx) + 1;
                 } catch (e) {
                     console.warn('There was an error in JSON. Could not parse.');
                 }
-            } else if (this.status === 204) { // 204 No Content, so NULL
-                @*window.alert("No more elements avaliable");*@
+            } else if (this.status === 204) {
                 document.getElementById("more-btn").style.display = 'none';
             } else {
                 console.warn("Recived " + this.status + " in response code.");
@@ -78,7 +73,7 @@
 
     @*window.onscroll = function (ev) {
         if (($(window).innerHeight() + $(window).scrollTop()) >= $("body").height()) {
-            let response = await jsAjax();
+            jsAjax();
         }
     };*@
 </script>

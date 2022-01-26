@@ -32,10 +32,9 @@ namespace L10_2.Controllers
         // GET: Article
         public async Task<IActionResult> Index()
         {
-            var allFirstDisplayed = 6;
-            ViewData["maxInx"] = _context.Article.OrderBy(item => item.Id).Take(allFirstDisplayed).Last().Id;
-            ViewData["CurrentInx"] = _context.Article.OrderBy(item => item.Id).Take(allFirstDisplayed).Last().Id;
-            var shopDbContext = _context.Article.Include(a => a.Category).OrderBy(item => item.Id);
+            var allFirstDisplayed = 5;
+            ViewData["loadedNr"] = allFirstDisplayed;
+            var shopDbContext = _context.Article.Include(a => a.Category).OrderBy(item => item.Id).Take(allFirstDisplayed);
             return View(await shopDbContext.ToListAsync());
         }
 
