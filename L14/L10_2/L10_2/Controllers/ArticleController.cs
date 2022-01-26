@@ -34,6 +34,7 @@ namespace L10_2.Controllers
         {
             var allFirstDisplayed = 6;
             ViewData["maxInx"] = _context.Article.OrderBy(item => item.Id).Take(allFirstDisplayed).Last().Id;
+            ViewData["CurrentInx"] = _context.Article.OrderBy(item => item.Id).Take(allFirstDisplayed).Last().Id;
             var shopDbContext = _context.Article.Include(a => a.Category).OrderBy(item => item.Id);
             return View(await shopDbContext.ToListAsync());
         }
@@ -195,6 +196,7 @@ namespace L10_2.Controllers
             return _context.Article.Any(e => e.Id == id);
         }
 
+        [Route("Article/_ArticleRow/{id}")]
         public async Task<IActionResult> _ArticleRow(int? id)
         {
             if (id == null)
@@ -209,7 +211,6 @@ namespace L10_2.Controllers
             {
                 return NotFound();
             }
-
             return PartialView(article);
         }
     }

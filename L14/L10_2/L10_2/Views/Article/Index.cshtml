@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Article";
+    TempData["current"] = ViewBag.maxInx;
+    var currentValue = ViewBag.maxInx;
 }
 
 <h1>Article</h1>
@@ -27,24 +29,18 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="rows-body">
         @foreach (var item in Model)
         {
-            var trStyle = "";
-            @if(item.Id > ViewBag.maxInx)
-            {
-                trStyle = "none";
-            }
-        <tr id="row-@item.Id" style="display: @trStyle;">
-            @{Html.RenderPartial("_ArticleRow", item);}
-        </tr>
+        <tr id="row-@item.Id"></tr>
         }
     </tbody>
 </table>
 
 <p id="loaded" hidden>0</p>
+<p id="currentId" hidden>0</p>
 <div>
-    <button class="form-control" onclick="jsAjax()"> Load more </button>
+    <button id="more-btn" class="form-control" onclick="jsAjax()"> Load more </button>
 </div>
 
 <script>
@@ -53,29 +49,36 @@
         xhr.onload = function () {
             if (this.status === 200) {
                 try {
-                    const inx = JSON.parse(this.responseText);
-                    //console.log(stud);
+                    const article = JSON.parse(this.responseText);
                     let id = document.getElementById("loaded").innerHTML.trim();
-                    document.getElementById("row-" + inx).style.display = '';
+                    @*document.getElementById("row-" + article.id).style.display = '';*@
+
+                    $.get('@Url.Action("_ArticleRow", "Article")' + '/' + article.id, {},
+                        function (response) {
+                            @*$("#row-" + article.id).html(response);*@
+                            @*document.querySelector('#rows-body').insertAdjacentHTML('afterend', response);*@
+                            document.querySelector('#rows-body').innerHTML += response;
+                        });
                     document.getElementById("loaded").innerHTML = parseInt(id) + 1;
                 } catch (e) {
                     console.warn('There was an error in JSON. Could not parse.');
                 }
             } else if (this.status === 204) { // 204 No Content, so NULL
-                window.alert("No " + " element");
+                @*window.alert("No more elements avaliable");*@
+                document.getElementById("more-btn").style.display = 'none';
             } else {
                 console.warn("Recived " + this.status + " in response code.");
             }
         };
         let id = document.getElementById("loaded");
-        let str = "/api/article/loadmore/" + id.innerHTML.trim();
+        let str = "/api/article/getNext/" + id.innerHTML.trim();
         xhr.open("get", str)
         xhr.send();
     }
 
-    window.onscroll = function (ev) {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-            jsAjax();
+    @*window.onscroll = function (ev) {
+        if (($(window).innerHeight() + $(window).scrollTop()) >= $("body").height()) {
+            let response = await jsAjax();
         }
-    };
+    };*@
 </script>

@@ -88,6 +88,39 @@ namespace L10_2.Controllers
             //return loaded.Take(len).Last();
         }
 
+        [HttpGet("getNext/{inx}")]
+        public Article getNext(int inx)
+        {
+            inx += 1;
+            var loaded = _context.Article.OrderBy(item => item.Id).Take(inx);
+            //foreach(var article in loaded)
+            //{
+            //    article.Category = _context.Category.Where(item => item.Id == article.CategoryId).First();
+            //}
+            if(loaded.ToList().Count < inx)
+            {
+                return null;
+            }
+
+            return loaded.Last();
+            //if(len >= loaded.ToList().Count)
+            //{
+            //    return loaded.Last();
+            //}
+            //return loaded.Take(len).Last();
+        }
+
+        [HttpGet("getArticle/{id}")]
+        public Article getArticle(int id)
+        {
+            var articles = _context.Article.Where(item => item.Id == id);
+            if(articles.ToList().Count == 0)
+            {
+                return null;
+            }
+            return articles.First();
+        }
+
         //[HttpGet("prev/{id}")]
         //public Article GetPrev(int id) => _context.Article
         //    .Where(item => item.Id < id)
