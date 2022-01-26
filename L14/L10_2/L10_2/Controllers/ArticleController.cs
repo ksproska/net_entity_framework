@@ -194,5 +194,23 @@ namespace L10_2.Controllers
         {
             return _context.Article.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> _ArticleRow(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var article = await _context.Article
+                .Include(a => a.Category)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView(article);
+        }
     }
 }

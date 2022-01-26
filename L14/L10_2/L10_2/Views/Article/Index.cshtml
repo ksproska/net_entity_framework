@@ -35,26 +35,9 @@
             {
                 trStyle = "none";
             }
-            <tr id="row-@item.Id" style="display: @trStyle;">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
-                </td>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.PhotoRelativePath)*@
-                    <img src="@Html.DisplayFor(modelItem => item.PhotoRelativePath)" height="80" />
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+        <tr id="row-@item.Id" style="display: @trStyle;">
+            @{Html.RenderPartial("_ArticleRow", item);}
+        </tr>
         }
     </tbody>
 </table>
